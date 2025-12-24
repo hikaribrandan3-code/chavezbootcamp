@@ -1,23 +1,24 @@
 /**
  * Chavez Bootcamp - Home Dashboard
- * Daily quote, today's workout preview, streak, and stats
- * Rev 2: Added rest day override button
+ * Rev 3: Military time display, improved progress cards
  */
 
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { getUserProfile, getWorkoutPlan, getTodaysWorkout, getCurrentStreak, getLatestWeight, getWeightProgress, getDaysUntilGoal, getWorkoutsCompletedThisWeek } from '../utils/storage.js'
+import { Link, useNavigate } from 'react-router-dom'
+import { getUserProfile, getWorkoutPlan, getTodaysWorkout, getCurrentStreak, getLatestWeight, getWeightProgress, getDaysUntilGoal, getWorkoutsCompletedThisWeek, unlockBadge, hasBadge } from '../utils/storage.js'
 import { getDailyQuote } from '../data/quotes.js'
 import { Icons } from '../components/Icons.jsx'
 import './Home.css'
 
 function Home() {
+    const navigate = useNavigate()
     const [profile, setProfile] = useState(null)
     const [todaysWorkout, setTodaysWorkout] = useState(null)
     const [streak, setStreak] = useState(0)
     const [quote, setQuote] = useState('')
     const [stats, setStats] = useState({})
     const [overrideRestDay, setOverrideRestDay] = useState(false)
+    const [militaryTime, setMilitaryTime] = useState('')
 
     useEffect(() => {
         const userProfile = getUserProfile()
@@ -33,6 +34,22 @@ function Home() {
             daysRemaining: getDaysUntilGoal(),
             workoutsThisWeek: getWorkoutsCompletedThisWeek()
         })
+
+        // Check for Iron Clad badge (0 pain in assessment)
+        if (userProfile && userProfile.injuries?.length === 0 && !hasBadge('iron_clad')) {
+            unlockBadge('iron_clad')
+        }
+
+        // Update military time every second
+        const updateTime = () => {
+            const now = new Date()
+            const hours = now.getHours().toString().padStart(2, '0')
+            const minutes = now.getMinutes().toString().padStart(2, '0')
+            setMilitaryTime(`${hours}:${minutes}`)
+        }
+        updateTime()
+        const interval = setInterval(updateTime, 1000)
+        return () => clearInterval(interval)
     }, [])
 
     const getGreeting = () => {
@@ -50,6 +67,14 @@ function Home() {
         }).toUpperCase()
     }
 
+    const handleRestDayOverride = () => {
+        setOverrideRestDay(true)
+        // Award No Excuses badge
+        if (!hasBadge('no_excuses')) {
+            unlockBadge('no_excuses')
+        }
+    }
+
     const isRestDay = !todaysWorkout || todaysWorkout.type === 'rest'
     const showWorkout = !isRestDay || overrideRestDay
 
@@ -58,7 +83,10 @@ function Home() {
             {/* Header */}
             <div className="home-header">
                 <div>
-                    <h1 className="greeting">{getGreeting()}</h1>
+                    <div className="greeting-row">
+                        <h1 className="greeting">{getGreeting()}</h1>
+                        <span className="military-time">{militaryTime}</span>
+                    </div>
                     <p className="date">{formatDate()}</p>
                 </div>
                 <Link to="/settings" className="settings-btn">
@@ -117,7 +145,7 @@ function Home() {
 
                     <button
                         className="btn btn-secondary btn-block override-btn"
-                        onClick={() => setOverrideRestDay(true)}
+                        onClick={handleRestDayOverride}
                     >
                         OVERRIDE: I WANT TO TRAIN
                     </button>
@@ -135,7 +163,7 @@ function Home() {
                     </div>
                     <div className="stat-content">
                         <span className="stat-label">CURRENT</span>
-                        <span className="stat-value">{stats.currentWeight || '--'} lbs</span>
+                        <span className="stat-value">{stats.currentWeight || '--'} <span className="stat-unit">lbs</span></span>
                     </div>
                 </div>
 
@@ -147,7 +175,7 @@ function Home() {
                     </div>
                     <div className="stat-content">
                         <span className="stat-label">GOAL</span>
-                        <span className="stat-value">{stats.goalWeight || '--'} lbs</span>
+                        <span className="stat-value">{stats.goalWeight || '--'} <span className="stat-unit">lbs</span></span>
                     </div>
                 </div>
 
@@ -159,11 +187,11 @@ function Home() {
                     </div>
                     <div className="stat-content">
                         <span className="stat-label">PROGRESS</span>
-                        <span className="stat-value">{stats.progress || 0}%</span>
+                        <span className="stat-value">{stats.progress || 0}<span className="stat-unit">%</span></span>
                     </div>
                 </div>
 
-                <div className="stat-card">
+                <div className="stat-card stat-days">
                     <div className="stat-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256">
                             <path d="M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,48v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24V80H48V48ZM208,208H48V96H208V208Zm-68-76a12,12,0,1,1-12-12A12,12,0,0,1,140,132Zm44,0a12,12,0,1,1-12-12A12,12,0,0,1,184,132Zm-88,40a12,12,0,1,1-12-12A12,12,0,0,1,96,172Zm44,0a12,12,0,1,1-12-12A12,12,0,0,1,140,172Zm44,0a12,12,0,1,1-12-12A12,12,0,0,1,184,172Z"></path>

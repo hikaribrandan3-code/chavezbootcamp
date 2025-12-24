@@ -1,7 +1,6 @@
 /**
  * Chavez Bootcamp - Onboarding Page
- * Multi-step form wizard for user profile creation
- * Rev 2: Split height into Feet + Inches
+ * Rev 3: CHAVEZ BOOTCAMP header, injury pain ratings, fixed icons
  */
 
 import { useState } from 'react'
@@ -37,6 +36,7 @@ function Onboarding({ onComplete }) {
         allergies: '',
         medicalConditions: '',
         injuries: [],
+        injuryRatings: {}, // { shoulder: 5, knee: 3 }
 
         // Location
         workoutLocation: 'home',
@@ -55,6 +55,13 @@ function Onboarding({ onComplete }) {
         setFormData(prev => ({ ...prev, [field]: value }))
     }
 
+    const updateInjuryRating = (injury, rating) => {
+        setFormData(prev => ({
+            ...prev,
+            injuryRatings: { ...prev.injuryRatings, [injury]: rating }
+        }))
+    }
+
     const nextStep = () => {
         if (currentStep < STEPS.length - 1) {
             setCurrentStep(prev => prev + 1)
@@ -68,17 +75,14 @@ function Onboarding({ onComplete }) {
     }
 
     const handleComplete = () => {
-        // Calculate goal date
         const goalDate = new Date()
         goalDate.setMonth(goalDate.getMonth() + parseInt(formData.timeframe))
 
-        // Convert feet + inches to total inches
         const totalInches = (parseInt(formData.heightFeet) * 12) + parseInt(formData.heightInches || 0)
 
-        // Save profile
         const profile = {
             ...formData,
-            height: totalInches, // Store as total inches
+            height: totalInches,
             currentWeight: parseFloat(formData.currentWeight),
             goalWeight: parseFloat(formData.goalWeight),
             age: parseInt(formData.age),
@@ -89,7 +93,6 @@ function Onboarding({ onComplete }) {
 
         setUserProfile(profile)
 
-        // Generate first workout plan
         const plan = generateWorkoutPlan()
         if (plan) setWorkoutPlan(plan)
 
@@ -98,24 +101,11 @@ function Onboarding({ onComplete }) {
 
     const renderStep = () => {
         switch (STEPS[currentStep]) {
-            case 'welcome':
-                return (
-                    <div className="onboard-step welcome-step">
-                        <div className="welcome-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" viewBox="0 0 256 256">
-                                <path d="M248,120h-8V88a16,16,0,0,0-16-16H208V64a16,16,0,0,0-16-16H168a16,16,0,0,0-16,16v56H104V64A16,16,0,0,0,88,48H64A16,16,0,0,0,48,64v8H32A16,16,0,0,0,16,88v32H8a8,8,0,0,0,0,16h8v32a16,16,0,0,0,16,16H48v8a16,16,0,0,0,16,16H88a16,16,0,0,0,16-16V136h48v56a16,16,0,0,0,16,16h24a16,16,0,0,0,16-16v-8h16a16,16,0,0,0,16-16V136h8a8,8,0,0,0,0-16ZM32,168V88H48v80Zm56,24H64V64H88V192Zm104,0H168V64h24V175.82c0,.06,0,.12,0,.18s0,.12,0,.18V192Zm32-24H208V88h16Z"></path>
-                            </svg>
-                        </div>
-                        <h1>WELCOME, SOLDIER</h1>
-                        <p>You made the decision to change your life.<br />That's the hardest part. Now let's get to work.</p>
-                        <p className="text-muted">I'm your coach. I'll push you. I won't coddle you. But I'll get you results.</p>
-                    </div>
-                )
-
             case 'basics':
                 return (
                     <div className="onboard-step">
-                        <h2>THE BASICS</h2>
+                        <h1 className="bootcamp-title">CHAVEZ BOOTCAMP</h1>
+                        <h2 className="step-title">THE BASICS</h2>
                         <p className="step-subtitle">Let's get your stats, soldier.</p>
 
                         <div className="form-group">
@@ -175,7 +165,8 @@ function Onboarding({ onComplete }) {
             case 'goals':
                 return (
                     <div className="onboard-step">
-                        <h2>YOUR MISSION</h2>
+                        <h1 className="bootcamp-title">CHAVEZ BOOTCAMP</h1>
+                        <h2 className="step-title">YOUR MISSION</h2>
                         <p className="step-subtitle">What are we fighting for?</p>
 
                         <div className="form-group">
@@ -221,7 +212,8 @@ function Onboarding({ onComplete }) {
             case 'health':
                 return (
                     <div className="onboard-step">
-                        <h2>HEALTH CHECK</h2>
+                        <h1 className="bootcamp-title">CHAVEZ BOOTCAMP</h1>
+                        <h2 className="step-title">HEALTH CHECK</h2>
                         <p className="step-subtitle">Any limitations I should know about?</p>
 
                         <div className="form-group">
@@ -248,22 +240,47 @@ function Onboarding({ onComplete }) {
 
                         <div className="form-group">
                             <label className="form-label">Injuries / Pain Areas</label>
-                            <div className="checkbox-group">
+                            <div className="injury-list">
                                 {['shoulder', 'back', 'knee', 'hip', 'wrist', 'ankle'].map(injury => (
-                                    <label key={injury} className="checkbox-label">
-                                        <input
-                                            type="checkbox"
-                                            checked={formData.injuries.includes(injury)}
-                                            onChange={e => {
-                                                if (e.target.checked) {
-                                                    updateForm('injuries', [...formData.injuries, injury])
-                                                } else {
-                                                    updateForm('injuries', formData.injuries.filter(i => i !== injury))
-                                                }
-                                            }}
-                                        />
-                                        <span>{injury.charAt(0).toUpperCase() + injury.slice(1)}</span>
-                                    </label>
+                                    <div key={injury} className="injury-item">
+                                        <label className="checkbox-label">
+                                            <input
+                                                type="checkbox"
+                                                checked={formData.injuries.includes(injury)}
+                                                onChange={e => {
+                                                    if (e.target.checked) {
+                                                        updateForm('injuries', [...formData.injuries, injury])
+                                                    } else {
+                                                        updateForm('injuries', formData.injuries.filter(i => i !== injury))
+                                                        // Clear rating when unchecked
+                                                        const newRatings = { ...formData.injuryRatings }
+                                                        delete newRatings[injury]
+                                                        setFormData(prev => ({ ...prev, injuryRatings: newRatings }))
+                                                    }
+                                                }}
+                                            />
+                                            <span>{injury.charAt(0).toUpperCase() + injury.slice(1)}</span>
+                                        </label>
+
+                                        {/* Pain Rating - show only when injury is selected */}
+                                        {formData.injuries.includes(injury) && (
+                                            <div className="pain-rating">
+                                                <span className="pain-label">Pain Level:</span>
+                                                <div className="pain-buttons">
+                                                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => (
+                                                        <button
+                                                            key={num}
+                                                            type="button"
+                                                            className={`pain-btn ${formData.injuryRatings[injury] === num ? 'selected' : ''}`}
+                                                            onClick={() => updateInjuryRating(injury, num)}
+                                                        >
+                                                            {num}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
                                 ))}
                             </div>
                         </div>
@@ -273,7 +290,8 @@ function Onboarding({ onComplete }) {
             case 'location':
                 return (
                     <div className="onboard-step">
-                        <h2>YOUR BATTLEFIELD</h2>
+                        <h1 className="bootcamp-title">CHAVEZ BOOTCAMP</h1>
+                        <h2 className="step-title">YOUR BATTLEFIELD</h2>
                         <p className="step-subtitle">Where will you train?</p>
 
                         <div className="form-group">
@@ -286,6 +304,7 @@ function Onboarding({ onComplete }) {
                                 ].map(opt => (
                                     <button
                                         key={opt.value}
+                                        type="button"
                                         className={`option-card ${formData.workoutLocation === opt.value ? 'selected' : ''}`}
                                         onClick={() => updateForm('workoutLocation', opt.value)}
                                     >
@@ -338,7 +357,8 @@ function Onboarding({ onComplete }) {
             case 'schedule':
                 return (
                     <div className="onboard-step">
-                        <h2>COMMIT TO THE MISSION</h2>
+                        <h1 className="bootcamp-title">CHAVEZ BOOTCAMP</h1>
+                        <h2 className="step-title">COMMIT TO THE MISSION</h2>
                         <p className="step-subtitle">How many days can you show up?</p>
 
                         <div className="form-group">
@@ -347,6 +367,7 @@ function Onboarding({ onComplete }) {
                                 {[3, 4, 5, 6].map(num => (
                                     <button
                                         key={num}
+                                        type="button"
                                         className={`day-btn ${formData.daysPerWeek === num ? 'selected' : ''}`}
                                         onClick={() => updateForm('daysPerWeek', num)}
                                     >
@@ -366,10 +387,10 @@ function Onboarding({ onComplete }) {
                                 value={formData.preferredTime}
                                 onChange={e => updateForm('preferredTime', e.target.value)}
                             >
-                                <option value="morning">Morning (5am - 9am)</option>
-                                <option value="midday">Midday (11am - 2pm)</option>
-                                <option value="afternoon">Afternoon (3pm - 6pm)</option>
-                                <option value="evening">Evening (7pm - 10pm)</option>
+                                <option value="morning">Morning (0500 - 0900)</option>
+                                <option value="midday">Midday (1100 - 1400)</option>
+                                <option value="afternoon">Afternoon (1500 - 1800)</option>
+                                <option value="evening">Evening (1900 - 2200)</option>
                             </select>
                         </div>
                     </div>
@@ -378,7 +399,8 @@ function Onboarding({ onComplete }) {
             case 'why':
                 return (
                     <div className="onboard-step">
-                        <h2>YOUR WHY</h2>
+                        <h1 className="bootcamp-title">CHAVEZ BOOTCAMP</h1>
+                        <h2 className="step-title">YOUR WHY</h2>
                         <p className="step-subtitle">Why are you doing this? Be honest. This will keep you going when it gets hard.</p>
 
                         <div className="form-group">
@@ -404,14 +426,12 @@ function Onboarding({ onComplete }) {
 
     const canProceed = () => {
         switch (STEPS[currentStep]) {
-            case 'welcome':
-                return true
             case 'basics':
                 return formData.age && formData.heightFeet && formData.currentWeight
             case 'goals':
                 return formData.goalWeight && formData.goal && formData.timeframe
             case 'health':
-                return true // Optional fields
+                return true
             case 'location':
                 return formData.workoutLocation && formData.budget
             case 'schedule':
@@ -428,7 +448,6 @@ function Onboarding({ onComplete }) {
 
     return (
         <div className="onboarding-container">
-            {/* Progress Bar */}
             <div className="onboarding-progress">
                 <div className="progress-bar">
                     <div className="progress-fill" style={{ width: `${progress}%` }} />
@@ -436,12 +455,10 @@ function Onboarding({ onComplete }) {
                 <span className="progress-text">{currentStep + 1} / {STEPS.length}</span>
             </div>
 
-            {/* Step Content */}
             <div className="onboarding-content">
                 {renderStep()}
             </div>
 
-            {/* Navigation */}
             <div className="onboarding-nav">
                 {currentStep > 0 && (
                     <button className="btn btn-ghost" onClick={prevStep}>

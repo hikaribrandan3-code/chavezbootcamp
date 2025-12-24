@@ -84,11 +84,11 @@ export function setWorkoutPlan(plan) {
 export function getTodaysWorkout() {
   const plan = getWorkoutPlan();
   if (!plan || !plan.workouts) return null;
-  
+
   const today = new Date();
   const dayOfWeek = today.getDay(); // 0 = Sunday, 1 = Monday, etc.
   const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-  
+
   return plan.workouts.find(w => w.day.toLowerCase() === dayNames[dayOfWeek]) || null;
 }
 
@@ -109,20 +109,20 @@ export function logCompletedWorkout(workout) {
   };
   history.push(entry);
   setItem(STORAGE_KEYS.WORKOUT_HISTORY, history);
-  
+
   // Update streak
   updateStreak();
-  
+
   // Check for badge unlocks
   checkBadgeUnlocks();
-  
+
   return entry;
 }
 
 export function getWorkoutsCompletedThisWeek() {
   const history = getWorkoutHistory();
   const startOfWeek = getStartOfWeek(new Date());
-  
+
   return history.filter(w => {
     const completedDate = new Date(w.completedAt);
     return completedDate >= startOfWeek;
@@ -151,10 +151,10 @@ export function logWeight(weight, notes = '') {
   };
   logs.push(entry);
   setItem(STORAGE_KEYS.WEIGHT_LOGS, logs);
-  
+
   // Check for weight-related badge unlocks
   checkBadgeUnlocks();
-  
+
   return entry;
 }
 
@@ -170,16 +170,16 @@ export function getLatestWeight() {
 export function getWeightProgress() {
   const profile = getUserProfile();
   if (!profile) return null;
-  
+
   const startWeight = profile.currentWeight;
   const goalWeight = profile.goalWeight;
   const currentWeight = getLatestWeight() || startWeight;
-  
+
   const totalToLose = startWeight - goalWeight;
   const actuallyLost = startWeight - currentWeight;
-  
+
   if (totalToLose === 0) return 100;
-  
+
   const percentage = Math.round((actuallyLost / totalToLose) * 100);
   return Math.max(0, Math.min(100, percentage));
 }
@@ -226,27 +226,27 @@ export function updateStreak() {
   const streakData = getStreakData();
   const today = new Date().toDateString();
   const lastWorkout = streakData.lastWorkoutDate;
-  
+
   if (lastWorkout === today) {
     // Already worked out today
     return streakData;
   }
-  
+
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
-  
+
   let newStreak = 1;
   if (lastWorkout === yesterday.toDateString()) {
     // Consecutive day, increment streak
     newStreak = streakData.currentStreak + 1;
   }
-  
+
   const updatedData = {
     currentStreak: newStreak,
     longestStreak: Math.max(streakData.longestStreak, newStreak),
     lastWorkoutDate: today
   };
-  
+
   setItem(STORAGE_KEYS.STREAK, updatedData);
   return updatedData;
 }
@@ -263,19 +263,20 @@ function getStartOfWeek(date) {
 // ========================================
 
 const BADGE_DEFINITIONS = [
-  { id: 'first_workout', name: 'First Blood', description: 'Completed your first workout', icon: '🎖️' },
-  { id: 'streak_3', name: 'Hat Trick', description: '3-day workout streak', icon: '🔥' },
-  { id: 'streak_7', name: 'Week Warrior', description: '7-day workout streak', icon: '⚔️' },
+  // Core badges
+  { id: 'first_workout', name: 'First Blood', description: 'Completed your first workout', icon: '🩸' },
+  { id: 'early_riser', name: 'Early Riser', description: 'Workout completed before 0700', icon: '🌅' },
+  { id: 'streak_7', name: 'Warrior Week', description: '7-day workout streak', icon: '⚔️' },
+  { id: 'savage', name: 'Savage', description: 'Rated a workout "Too Easy"', icon: '🔥' },
+  { id: 'meal_prep_king', name: 'Meal Prep King', description: 'Logged 10 meals', icon: '👑' },
+  { id: 'no_excuses', name: 'No Excuses', description: 'Worked out on a Rest Day', icon: '💪' },
+  { id: 'iron_clad', name: 'Iron Clad', description: 'Logged 0 pain in assessment', icon: '🛡️' },
+  { id: 'century_club', name: 'Century Club', description: '100 total sets completed', icon: '💯' },
+  // Bonus badges
   { id: 'streak_30', name: 'Iron Discipline', description: '30-day workout streak', icon: '🏆' },
-  { id: 'workouts_10', name: 'Committed', description: 'Completed 10 workouts', icon: '💪' },
+  { id: 'workouts_10', name: 'Committed', description: 'Completed 10 workouts', icon: '🎖️' },
   { id: 'workouts_50', name: 'Seasoned', description: 'Completed 50 workouts', icon: '🎯' },
-  { id: 'workouts_100', name: 'Centurion', description: 'Completed 100 workouts', icon: '⭐' },
-  { id: 'lost_5', name: 'First 5 Down', description: 'Lost 5 lbs', icon: '📉' },
-  { id: 'lost_10', name: 'Double Digits', description: 'Lost 10 lbs', icon: '🔻' },
-  { id: 'lost_20', name: 'Transformation', description: 'Lost 20 lbs', icon: '🦅' },
-  { id: 'goal_25', name: 'Quarter Way', description: '25% to goal weight', icon: '🎖️' },
   { id: 'goal_50', name: 'Halfway Hero', description: '50% to goal weight', icon: '🥈' },
-  { id: 'goal_75', name: 'Almost There', description: '75% to goal weight', icon: '🥇' },
   { id: 'goal_100', name: 'Mission Complete', description: 'Reached goal weight!', icon: '🏅' }
 ];
 
@@ -290,10 +291,10 @@ export function getAllBadgeDefinitions() {
 export function unlockBadge(badgeId) {
   const badges = getBadges();
   if (badges.includes(badgeId)) return false;
-  
+
   badges.push(badgeId);
   setItem(STORAGE_KEYS.BADGES, badges);
-  
+
   // Return badge info for celebration
   return BADGE_DEFINITIONS.find(b => b.id === badgeId);
 }
@@ -307,25 +308,25 @@ function checkBadgeUnlocks() {
   const streak = getCurrentStreak();
   const profile = getUserProfile();
   const currentWeight = getLatestWeight();
-  
+
   // Workout count badges
   if (totalWorkouts >= 1 && !hasBadge('first_workout')) unlockBadge('first_workout');
   if (totalWorkouts >= 10 && !hasBadge('workouts_10')) unlockBadge('workouts_10');
   if (totalWorkouts >= 50 && !hasBadge('workouts_50')) unlockBadge('workouts_50');
   if (totalWorkouts >= 100 && !hasBadge('workouts_100')) unlockBadge('workouts_100');
-  
+
   // Streak badges
   if (streak >= 3 && !hasBadge('streak_3')) unlockBadge('streak_3');
   if (streak >= 7 && !hasBadge('streak_7')) unlockBadge('streak_7');
   if (streak >= 30 && !hasBadge('streak_30')) unlockBadge('streak_30');
-  
+
   // Weight loss badges
   if (profile && currentWeight) {
     const lost = profile.currentWeight - currentWeight;
     if (lost >= 5 && !hasBadge('lost_5')) unlockBadge('lost_5');
     if (lost >= 10 && !hasBadge('lost_10')) unlockBadge('lost_10');
     if (lost >= 20 && !hasBadge('lost_20')) unlockBadge('lost_20');
-    
+
     // Goal progress badges
     const progress = getWeightProgress();
     if (progress >= 25 && !hasBadge('goal_25')) unlockBadge('goal_25');
@@ -410,11 +411,11 @@ export function deleteAllData() {
 export function getDaysUntilGoal() {
   const profile = getUserProfile();
   if (!profile || !profile.goalDate) return null;
-  
+
   const goalDate = new Date(profile.goalDate);
   const today = new Date();
   const diffTime = goalDate - today;
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  
+
   return Math.max(0, diffDays);
 }

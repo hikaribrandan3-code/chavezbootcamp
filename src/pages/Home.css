@@ -1,4 +1,4 @@
-/* Home Page Styles */
+/* Home Page Styles - Rev 3 */
 
 .home-page {
     padding-bottom: calc(var(--nav-height) + var(--space-xl) + var(--safe-area-bottom));
@@ -11,11 +11,24 @@
     margin-bottom: var(--space-lg);
 }
 
+.greeting-row {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-md);
+}
+
 .greeting {
     font-family: var(--font-display);
     font-size: var(--text-3xl);
     color: var(--color-text-primary);
     margin: 0;
+}
+
+.military-time {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    color: var(--color-accent);
+    letter-spacing: 0.1em;
 }
 
 .date {
@@ -34,6 +47,7 @@
     background: var(--color-bg-secondary);
     border-radius: var(--radius-full);
     text-decoration: none;
+    color: var(--color-text-muted);
 }
 
 /* Quote Card */
@@ -77,7 +91,9 @@
 }
 
 .rest-icon {
-    font-size: 3rem;
+    display: flex;
+    justify-content: center;
+    color: var(--color-text-muted);
     margin-bottom: var(--space-md);
 }
 
@@ -89,13 +105,6 @@
 .rest-day-card p {
     color: var(--color-text-secondary);
     margin-bottom: var(--space-sm);
-}
-
-.rest-icon {
-    display: flex;
-    justify-content: center;
-    color: var(--color-text-muted);
-    margin-bottom: var(--space-md);
 }
 
 .override-btn {
@@ -114,6 +123,24 @@
 /* Stats Grid */
 .home-page .stats-grid {
     margin-bottom: var(--space-xl);
+}
+
+/* Stat Value + Unit alignment */
+.stat-value {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+}
+
+.stat-unit {
+    font-size: var(--text-sm);
+    font-weight: 400;
+    color: var(--color-text-muted);
+}
+
+/* Days Left - extra padding */
+.stat-days .stat-content {
+    padding-right: var(--space-md);
 }
 
 /* Weekly Summary */

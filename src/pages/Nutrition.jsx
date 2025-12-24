@@ -1,6 +1,6 @@
 /**
  * Chavez Bootcamp - Nutrition Page
- * 50 Quick 10-minute meal prep recipes
+ * Rev 3: Full screen meal modal
  */
 
 import { useState } from 'react'
@@ -89,19 +89,21 @@ function Nutrition() {
                 ))}
             </div>
 
-            {/* Meal Detail Modal */}
+            {/* Full Screen Meal Detail Modal */}
             {selectedMeal && (
-                <div className="modal-overlay" onClick={() => setSelectedMeal(null)}>
-                    <div className="modal-content" onClick={e => e.stopPropagation()}>
-                        <div className="modal-header">
-                            <h3 className="modal-title">{selectedMeal.name}</h3>
-                            <button className="modal-close" onClick={() => setSelectedMeal(null)}>×</button>
-                        </div>
-                        <div className="modal-body">
-                            <div className="meal-detail-meta">
-                                <span className="meal-detail-cal">{selectedMeal.cal} calories</span>
-                                <span className="meal-detail-category">{selectedMeal.category.toUpperCase()}</span>
-                            </div>
+                <div className="fullscreen-modal" onClick={() => setSelectedMeal(null)}>
+                    <div className="fullscreen-modal-content" onClick={e => e.stopPropagation()}>
+                        {/* Close Button */}
+                        <button className="fullscreen-close" onClick={() => setSelectedMeal(null)}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256">
+                                <path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"></path>
+                            </svg>
+                        </button>
+
+                        <div className="fullscreen-modal-body">
+                            <div className="meal-detail-category">{selectedMeal.category.toUpperCase()}</div>
+                            <h1 className="meal-detail-title">{selectedMeal.name}</h1>
+                            <div className="meal-detail-cal">{selectedMeal.cal} CALORIES</div>
 
                             <div className="meal-detail-section">
                                 <h4>HOW TO MAKE IT</h4>
@@ -109,7 +111,7 @@ function Nutrition() {
                             </div>
 
                             <div className="meal-detail-time">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256">
                                     <path d="M128,40a96,96,0,1,0,96,96A96.11,96.11,0,0,0,128,40Zm0,176a80,80,0,1,1,80-80A80.09,80.09,0,0,1,128,216ZM173.66,90.34a8,8,0,0,1,0,11.32l-40,40a8,8,0,0,1-11.32-11.32l40-40A8,8,0,0,1,173.66,90.34ZM96,16a8,8,0,0,1,8-8h48a8,8,0,0,1,0,16H104A8,8,0,0,1,96,16Z"></path>
                                 </svg>
                                 <span>Ready in under 10 minutes</span>

@@ -1,13 +1,15 @@
-/* Onboarding Page Styles */
+/* Onboarding Page Styles - Rev 3 */
 
 .onboarding-container {
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background: var(--color-bg-primary);
+    min-height: 100vh;
+    min-height: 100dvh;
     padding: var(--space-lg);
+    background: var(--color-bg-primary);
 }
 
+/* Progress */
 .onboarding-progress {
     display: flex;
     align-items: center;
@@ -22,42 +24,43 @@
 .progress-text {
     font-size: var(--text-sm);
     color: var(--color-text-muted);
-    font-weight: 600;
+    white-space: nowrap;
 }
 
+/* Content */
 .onboarding-content {
     flex: 1;
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
 }
 
 .onboard-step {
     flex: 1;
 }
 
-.onboard-step h1,
-.onboard-step h2 {
+/* CHAVEZ BOOTCAMP Header */
+.bootcamp-title {
     font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    color: var(--color-accent);
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-xs);
+}
+
+.step-title {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
     color: var(--color-text-primary);
     margin-bottom: var(--space-sm);
-    text-align: center;
-}
-
-.onboard-step h1 {
-    font-size: var(--text-4xl);
-}
-
-.onboard-step h2 {
-    font-size: var(--text-3xl);
 }
 
 .step-subtitle {
-    color: var(--color-text-secondary);
-    text-align: center;
+    color: var(--color-text-muted);
     margin-bottom: var(--space-xl);
 }
 
-/* Welcome Step */
+/* Welcome Step (legacy, kept for reference) */
 .welcome-step {
     display: flex;
     flex-direction: column;
@@ -68,9 +71,19 @@
 }
 
 .welcome-icon {
-    font-size: 4rem;
+    width: 80px;
+    height: 80px;
+    background: var(--color-accent-dim);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-accent);
+    margin-bottom: var(--space-xl);
+}
+
+.welcome-step h1 {
     margin-bottom: var(--space-lg);
-    animation: pulse 2s infinite;
 }
 
 .welcome-step p {
@@ -117,31 +130,96 @@
     gap: var(--space-sm);
     padding: var(--space-sm) var(--space-md);
     background: var(--color-bg-secondary);
-    border: 1px solid var(--color-bg-tertiary);
     border-radius: var(--radius-md);
     cursor: pointer;
-    transition: all var(--transition-fast);
+    transition: background var(--transition-fast);
 }
 
-.checkbox-label:has(input:checked) {
-    background: var(--color-olive-dark);
-    border-color: var(--color-olive);
+.checkbox-label:hover {
+    background: var(--color-bg-tertiary);
 }
 
 .checkbox-label input {
     accent-color: var(--color-accent);
 }
 
-.checkbox-label span {
+/* Injury List with Pain Rating */
+.injury-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.injury-item {
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-lg);
+    padding: var(--space-md);
+    border: 1px solid var(--color-bg-tertiary);
+}
+
+.injury-item .checkbox-label {
+    background: transparent;
+    padding: 0;
+    margin-bottom: var(--space-sm);
+}
+
+/* Pain Rating 1-10 */
+.pain-rating {
+    margin-top: var(--space-sm);
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--color-bg-tertiary);
+}
+
+.pain-label {
+    display: block;
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-sm);
+}
+
+.pain-buttons {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.pain-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-bg-tertiary);
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-muted);
     font-size: var(--text-sm);
-    color: var(--color-text-secondary);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
 }
 
-.checkbox-label:has(input:checked) span {
-    color: var(--color-text-primary);
+.pain-btn:hover {
+    border-color: var(--color-olive);
 }
 
-/* Option Cards */
+.pain-btn.selected {
+    background: var(--color-error);
+    border-color: var(--color-error);
+    color: white;
+}
+
+/* Low pain = green, high pain = red */
+.pain-btn.selected:nth-child(-n+3) {
+    background: var(--color-success);
+    border-color: var(--color-success);
+}
+
+.pain-btn.selected:nth-child(n+4):nth-child(-n+6) {
+    background: var(--color-warning);
+    border-color: var(--color-warning);
+}
+
+/* Option Cards (Battlefield) */
 .option-cards {
     display: flex;
     gap: var(--space-md);
@@ -166,20 +244,17 @@
 }
 
 .option-card.selected {
-    background: var(--color-olive-dark);
     border-color: var(--color-accent);
+    background: var(--color-accent-dim);
 }
 
 .option-icon {
-    font-size: 2rem;
+    color: var(--color-accent);
+    display: flex;
 }
 
 .option-label {
     font-weight: 600;
-    color: var(--color-text-secondary);
-}
-
-.option-card.selected .option-label {
     color: var(--color-text-primary);
 }
 
@@ -188,17 +263,18 @@
     display: flex;
     justify-content: center;
     gap: var(--space-md);
+    margin-bottom: var(--space-md);
 }
 
 .day-btn {
-    width: 60px;
-    height: 60px;
-    border-radius: var(--radius-full);
-    background: var(--color-bg-secondary);
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-lg);
     border: 2px solid var(--color-bg-tertiary);
+    background: var(--color-bg-secondary);
     font-family: var(--font-display);
     font-size: var(--text-2xl);
-    color: var(--color-text-secondary);
+    color: var(--color-text-muted);
     cursor: pointer;
     transition: all var(--transition-fast);
 }
@@ -208,15 +284,15 @@
 }
 
 .day-btn.selected {
-    background: var(--color-accent);
     border-color: var(--color-accent);
+    background: var(--color-accent);
     color: var(--color-bg-primary);
 }
 
 /* Why Textarea */
 .why-textarea {
     min-height: 150px;
-    resize: none;
+    resize: vertical;
 }
 
 /* Navigation */
@@ -226,23 +302,5 @@
     gap: var(--space-md);
     padding-top: var(--space-lg);
     border-top: 1px solid var(--color-bg-tertiary);
-    margin-top: var(--space-xl);
-}
-
-.onboarding-nav .btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-/* Animations */
-@keyframes pulse {
-
-    0%,
-    100% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(1.1);
-    }
+    margin-top: var(--space-lg);
 }
