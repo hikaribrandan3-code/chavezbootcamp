@@ -1,6 +1,6 @@
 /**
  * Chavez Bootcamp - Home Dashboard
- * Rev 3: Military time display, improved progress cards
+ * Final MVP: Large Military HUD Clock, improved layout
  */
 
 import { useState, useEffect } from 'react'
@@ -18,7 +18,7 @@ function Home() {
     const [quote, setQuote] = useState('')
     const [stats, setStats] = useState({})
     const [overrideRestDay, setOverrideRestDay] = useState(false)
-    const [militaryTime, setMilitaryTime] = useState('')
+    const [militaryTime, setMilitaryTime] = useState({ hours: '00', minutes: '00', seconds: '00' })
 
     useEffect(() => {
         const userProfile = getUserProfile()
@@ -43,9 +43,11 @@ function Home() {
         // Update military time every second
         const updateTime = () => {
             const now = new Date()
-            const hours = now.getHours().toString().padStart(2, '0')
-            const minutes = now.getMinutes().toString().padStart(2, '0')
-            setMilitaryTime(`${hours}:${minutes}`)
+            setMilitaryTime({
+                hours: now.getHours().toString().padStart(2, '0'),
+                minutes: now.getMinutes().toString().padStart(2, '0'),
+                seconds: now.getSeconds().toString().padStart(2, '0')
+            })
         }
         updateTime()
         const interval = setInterval(updateTime, 1000)
@@ -80,13 +82,21 @@ function Home() {
 
     return (
         <div className="page home-page">
+            {/* Military HUD Clock */}
+            <div className="military-clock-hud">
+                <div className="clock-display">
+                    <span className="clock-hours">{militaryTime.hours}</span>
+                    <span className="clock-separator">:</span>
+                    <span className="clock-minutes">{militaryTime.minutes}</span>
+                    <span className="clock-seconds">{militaryTime.seconds}</span>
+                </div>
+                <div className="clock-label">MILITARY TIME</div>
+            </div>
+
             {/* Header */}
             <div className="home-header">
                 <div>
-                    <div className="greeting-row">
-                        <h1 className="greeting">{getGreeting()}</h1>
-                        <span className="military-time">{militaryTime}</span>
-                    </div>
+                    <h1 className="greeting">{getGreeting()}</h1>
                     <p className="date">{formatDate()}</p>
                 </div>
                 <Link to="/settings" className="settings-btn">
@@ -117,9 +127,12 @@ function Home() {
             {showWorkout && todaysWorkout ? (
                 <div className="card-hero workout-preview">
                     <div className="workout-preview-content">
-                        <span className="badge badge-accent">
-                            {isRestDay && overrideRestDay ? 'OVERRIDE: TRAINING TODAY' : "TODAY'S SESSION"}
-                        </span>
+                        <div className="workout-status-row">
+                            <span className="badge badge-accent">
+                                {isRestDay && overrideRestDay ? 'OVERRIDE MODE' : "TODAY'S SESSION"}
+                            </span>
+                            <span className="sync-indicator">{Icons.sync}</span>
+                        </div>
                         <h2 className="workout-title">
                             {todaysWorkout.type?.toUpperCase() || 'FULL BODY'} DAY
                         </h2>

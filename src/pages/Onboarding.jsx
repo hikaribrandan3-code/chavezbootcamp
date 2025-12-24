@@ -437,7 +437,7 @@ function Onboarding({ onComplete }) {
             case 'schedule':
                 return formData.daysPerWeek
             case 'why':
-                return formData.whyStatement.length >= 10
+                return formData.whyStatement.length >= 3
             default:
                 return false
         }
