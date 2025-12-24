@@ -142,8 +142,34 @@ function Camera() {
         stopCamera()
     }
 
-    const retakePhoto = () => {
+    const retakePhoto = async () => {
         setCapturedPhoto(null)
+        setCameraReady(false)
+
+        // Restart camera stream
+        try {
+            const mediaStream = await navigator.mediaDevices.getUserMedia({
+                video: {
+                    facingMode,
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
+                },
+                audio: false
+            })
+
+            setStream(mediaStream)
+
+            if (videoRef.current) {
+                videoRef.current.srcObject = mediaStream
+                videoRef.current.onloadedmetadata = () => {
+                    videoRef.current.play()
+                    setCameraReady(true)
+                }
+            }
+        } catch (err) {
+            console.error('Camera restart error:', err)
+            setCameraError('Failed to restart camera')
+        }
     }
 
     const handleLogWeight = () => {
