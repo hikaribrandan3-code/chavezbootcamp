@@ -1,0 +1,280 @@
+/* Progress Page Styles */
+
+.progress-page {
+    padding-bottom: calc(var(--nav-height) + var(--space-xl) + var(--safe-area-bottom));
+}
+
+.progress-page .page-title {
+    margin-bottom: var(--space-lg);
+}
+
+/* Summary Stats */
+.progress-summary {
+    display: flex;
+    justify-content: space-around;
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-xl);
+    padding: var(--space-lg);
+    margin-bottom: var(--space-xl);
+}
+
+.summary-stat {
+    text-align: center;
+}
+
+.summary-value {
+    display: block;
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    color: var(--color-accent);
+}
+
+.summary-label {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    letter-spacing: 0.1em;
+}
+
+/* Chart Section */
+.chart-section {
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    margin-bottom: var(--space-lg);
+}
+
+.chart-section h3 {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-lg);
+}
+
+.chart-empty {
+    text-align: center;
+    padding: var(--space-xl);
+    color: var(--color-text-muted);
+}
+
+/* Weight Chart */
+.weight-chart {
+    position: relative;
+    height: 150px;
+    display: flex;
+    gap: var(--space-sm);
+}
+
+.chart-labels {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    padding-right: var(--space-sm);
+}
+
+.chart-bars {
+    flex: 1;
+    display: flex;
+    align-items: flex-end;
+    gap: var(--space-xs);
+}
+
+.chart-bar-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+}
+
+.chart-bar {
+    width: 100%;
+    background: linear-gradient(to top, var(--color-olive), var(--color-accent));
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    margin-top: auto;
+}
+
+.chart-date {
+    font-size: 0.6rem;
+    color: var(--color-text-dim);
+    margin-top: var(--space-xs);
+    white-space: nowrap;
+}
+
+.goal-line {
+    position: absolute;
+    left: 40px;
+    right: 0;
+    border-top: 2px dashed var(--color-accent);
+}
+
+.goal-line span {
+    position: absolute;
+    right: 0;
+    top: -20px;
+    font-size: var(--text-xs);
+    color: var(--color-accent);
+}
+
+/* Workout Chart */
+.workout-chart {
+    height: 120px;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    gap: var(--space-md);
+}
+
+.workout-bar-container {
+    flex: 1;
+    max-width: 60px;
+    height: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.workout-bar-bg {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    height: calc(100% - 40px);
+    background: var(--color-bg-tertiary);
+    border-radius: var(--radius-md);
+}
+
+.workout-bar-fill {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    background: var(--color-accent);
+    border-radius: var(--radius-md);
+    transition: height var(--transition-base);
+}
+
+.workout-bar-target {
+    position: absolute;
+    left: -5px;
+    right: -5px;
+    border-top: 2px solid var(--color-olive);
+}
+
+.workout-count {
+    position: absolute;
+    top: 0;
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    color: var(--color-text-primary);
+}
+
+.workout-label {
+    position: absolute;
+    bottom: 0;
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+}
+
+/* Badges Section */
+.badges-section {
+    margin-bottom: var(--space-xl);
+}
+
+.badges-section h3 {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-md);
+}
+
+.badges-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+}
+
+.badge-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: var(--space-md);
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-bg-tertiary);
+}
+
+.badge-card.locked {
+    opacity: 0.5;
+}
+
+.badge-card.unlocked {
+    border-color: var(--color-olive);
+    background: var(--color-olive-dark);
+}
+
+.badge-icon {
+    font-size: 1.5rem;
+    margin-bottom: var(--space-xs);
+}
+
+.badge-name {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 2px;
+}
+
+.badge-desc {
+    font-size: 0.65rem;
+    color: var(--color-text-muted);
+    line-height: 1.3;
+}
+
+.badge-locked {
+    font-size: 0.65rem;
+    color: var(--color-text-dim);
+}
+
+/* History Section */
+.history-section h3 {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-md);
+}
+
+.history-list {
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-md);
+    border-bottom: 1px solid var(--color-bg-tertiary);
+}
+
+.history-item:last-child {
+    border-bottom: none;
+}
+
+.history-type {
+    font-weight: 600;
+    color: var(--color-text-primary);
+    display: block;
+}
+
+.history-date {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+}
+
+.history-duration {
+    color: var(--color-accent);
+    font-weight: 600;
+}

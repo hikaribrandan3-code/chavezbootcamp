@@ -1,0 +1,189 @@
+/* Settings Page Styles */
+
+.settings-page {
+    padding-bottom: calc(var(--nav-height) + var(--space-xl) + var(--safe-area-bottom));
+}
+
+.settings-page .page-title {
+    margin-bottom: var(--space-xl);
+}
+
+/* Settings Section */
+.settings-section {
+    margin-bottom: var(--space-xl);
+}
+
+.settings-section h3 {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-md);
+}
+
+/* Profile Summary */
+.profile-summary {
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+}
+
+.profile-row {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--space-sm) 0;
+    border-bottom: 1px solid var(--color-bg-tertiary);
+}
+
+.profile-row:last-of-type {
+    border-bottom: none;
+}
+
+.profile-label {
+    color: var(--color-text-muted);
+}
+
+.profile-value {
+    color: var(--color-text-primary);
+    font-weight: 600;
+}
+
+/* Profile Edit */
+.profile-edit {
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+}
+
+.btn-group {
+    display: flex;
+    gap: var(--space-md);
+    margin-top: var(--space-lg);
+}
+
+.btn-group .btn {
+    flex: 1;
+}
+
+/* Setting Row */
+.setting-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-md);
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-sm);
+}
+
+.setting-info {
+    flex: 1;
+}
+
+.setting-label {
+    display: block;
+    color: var(--color-text-primary);
+    font-weight: 500;
+}
+
+.setting-desc {
+    display: block;
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin-top: 2px;
+}
+
+.setting-select {
+    width: auto;
+    min-width: 120px;
+}
+
+/* Toggle Switch */
+.toggle {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 28px;
+}
+
+.toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background: var(--color-bg-tertiary);
+    border-radius: var(--radius-full);
+    transition: var(--transition-fast);
+}
+
+.toggle-slider::before {
+    content: '';
+    position: absolute;
+    height: 22px;
+    width: 22px;
+    left: 3px;
+    bottom: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: var(--transition-fast);
+}
+
+.toggle input:checked+.toggle-slider {
+    background: var(--color-accent);
+}
+
+.toggle input:checked+.toggle-slider::before {
+    transform: translateX(22px);
+}
+
+/* Danger Button */
+.danger-btn {
+    background: var(--color-error) !important;
+    color: white !important;
+    border-color: var(--color-error) !important;
+}
+
+.danger-btn:hover {
+    opacity: 0.9;
+}
+
+/* App Info */
+.app-info {
+    text-align: center;
+    padding: var(--space-xl);
+    color: var(--color-text-dim);
+    font-size: var(--text-sm);
+}
+
+.app-info p {
+    margin-bottom: var(--space-xs);
+}
+
+/* Delete Modal */
+.delete-modal {
+    max-width: 350px;
+    border-radius: var(--radius-xl);
+}
+
+.delete-modal .modal-body {
+    text-align: center;
+}
+
+.delete-modal h3 {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-md);
+}
+
+.delete-modal p {
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-xl);
+    line-height: 1.5;
+}
+
+.text-sm {
+    font-size: var(--text-sm);
+}

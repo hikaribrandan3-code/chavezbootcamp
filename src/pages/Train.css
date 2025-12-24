@@ -1,0 +1,319 @@
+/* Train Page Styles */
+
+.train-page {
+    padding-bottom: calc(var(--nav-height) + var(--space-xl) + var(--safe-area-bottom));
+}
+
+.train-page .page-title {
+    margin-bottom: var(--space-lg);
+}
+
+/* Week Header */
+.week-header {
+    margin-bottom: var(--space-md);
+}
+
+/* Week Calendar */
+.week-calendar {
+    display: flex;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-xl);
+}
+
+.calendar-day {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--space-sm);
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-md);
+    border: 2px solid transparent;
+}
+
+.calendar-day.today {
+    border-color: var(--color-accent);
+    background: var(--color-olive-dark);
+}
+
+.calendar-day.rest {
+    opacity: 0.6;
+}
+
+.day-name {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    margin-bottom: 2px;
+}
+
+.day-type {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    color: var(--color-text-primary);
+}
+
+/* Today's Workout */
+.today-workout {
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-xl);
+    padding: var(--space-lg);
+}
+
+.today-workout h2 {
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-sm);
+}
+
+.workout-stats {
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    margin-bottom: var(--space-lg);
+}
+
+.exercise-preview-list {
+    margin-bottom: var(--space-lg);
+}
+
+.exercise-preview-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-sm) 0;
+    border-bottom: 1px solid var(--color-bg-tertiary);
+}
+
+.exercise-preview-item:last-child {
+    border-bottom: none;
+}
+
+.exercise-num {
+    width: 24px;
+    height: 24px;
+    background: var(--color-bg-tertiary);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-xs);
+    color: var(--color-accent);
+}
+
+.exercise-name {
+    flex: 1;
+    color: var(--color-text-secondary);
+}
+
+.exercise-sets {
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+}
+
+/* Rest Day */
+.rest-day-message {
+    text-align: center;
+    padding: var(--space-2xl);
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-xl);
+}
+
+.rest-day-message h2 {
+    font-size: var(--text-3xl);
+    margin-bottom: var(--space-md);
+}
+
+/* Session Page */
+.session-page {
+    padding: var(--space-md);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.session-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-md);
+}
+
+.session-timer {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    color: var(--color-text-primary);
+}
+
+.session-progress {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    color: var(--color-accent);
+}
+
+.session-progress-bar {
+    margin-bottom: var(--space-xl);
+}
+
+/* Current Exercise */
+.current-exercise {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.exercise-counter {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-md);
+}
+
+.exercise-title {
+    font-size: var(--text-3xl);
+    margin-bottom: var(--space-lg);
+}
+
+.exercise-target {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: var(--space-xl);
+}
+
+.target-reps {
+    font-family: var(--font-display);
+    font-size: 5rem;
+    color: var(--color-accent);
+    line-height: 1;
+}
+
+.target-label {
+    font-size: var(--text-lg);
+    color: var(--color-text-muted);
+    letter-spacing: 0.2em;
+}
+
+.target-weight {
+    font-size: var(--text-lg);
+    color: var(--color-text-secondary);
+    margin-top: var(--space-sm);
+}
+
+/* Set Bubbles */
+.set-bubbles {
+    display: flex;
+    gap: var(--space-md);
+    margin-bottom: var(--space-xl);
+}
+
+/* Form Cues */
+.form-cues {
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: var(--space-xl);
+}
+
+.form-cue {
+    padding: var(--space-sm);
+    color: var(--color-text-secondary);
+    font-size: var(--text-sm);
+    text-align: left;
+}
+
+.complete-set-btn {
+    margin-top: auto;
+}
+
+/* Rest Overlay */
+.rest-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.rest-content {
+    text-align: center;
+}
+
+.rest-content h2 {
+    font-size: var(--text-3xl);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-md);
+}
+
+.rest-timer-display {
+    font-family: var(--font-display);
+    font-size: 8rem;
+    color: var(--color-accent);
+    line-height: 1;
+    margin-bottom: var(--space-md);
+}
+
+.rest-content p {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-xl);
+}
+
+/* Complete Page */
+.complete-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    text-align: center;
+}
+
+.complete-content {
+    padding: var(--space-xl);
+}
+
+.complete-icon {
+    font-size: 5rem;
+    margin-bottom: var(--space-lg);
+    animation: pulse 2s infinite;
+}
+
+.complete-content h1 {
+    font-size: var(--text-3xl);
+    margin-bottom: var(--space-md);
+}
+
+.complete-content p {
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-sm);
+}
+
+.feedback-section {
+    margin: var(--space-2xl) 0;
+}
+
+.feedback-section h3 {
+    font-size: var(--text-lg);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-md);
+}
+
+.feedback-options {
+    display: flex;
+    gap: var(--space-sm);
+    justify-content: center;
+}
+
+.feedback-btn {
+    padding: var(--space-md) var(--space-lg);
+    background: var(--color-bg-secondary);
+    border: 2px solid var(--color-bg-tertiary);
+    border-radius: var(--radius-lg);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.feedback-btn.selected {
+    background: var(--color-olive-dark);
+    border-color: var(--color-accent);
+    color: var(--color-text-primary);
+}
