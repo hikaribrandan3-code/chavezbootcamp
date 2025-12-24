@@ -62,13 +62,13 @@
 }
 
 .nav-item-camera .nav-icon {
-    color: #000000;
+    color: #ffffff;
 }
 
 .nav-item-camera .nav-icon svg {
     width: 28px;
     height: 28px;
-    fill: #000000;
+    fill: #ffffff;
 }
 
 .nav-item-camera .nav-label {
