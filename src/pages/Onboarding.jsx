@@ -1,6 +1,6 @@
 /**
  * Chavez Bootcamp - Onboarding Page
- * Rev 3: CHAVEZ BOOTCAMP header, injury pain ratings, fixed icons
+ * Perfect Loop: Name input, battlefield selection, persist & lock
  */
 
 import { useState } from 'react'
@@ -10,6 +10,7 @@ import { Icons } from '../components/Icons.jsx'
 import './Onboarding.css'
 
 const STEPS = [
+    'name',      // NEW: Ask for name first
     'basics',
     'goals',
     'health',
@@ -21,6 +22,9 @@ const STEPS = [
 function Onboarding({ onComplete }) {
     const [currentStep, setCurrentStep] = useState(0)
     const [formData, setFormData] = useState({
+        // Name (NEW)
+        name: '',
+
         // Basics
         age: '',
         heightFeet: '',
@@ -36,7 +40,7 @@ function Onboarding({ onComplete }) {
         allergies: '',
         medicalConditions: '',
         injuries: [],
-        injuryRatings: {}, // { shoulder: 5, knee: 3 }
+        injuryRatings: {},
 
         // Location
         workoutLocation: 'home',
@@ -88,7 +92,8 @@ function Onboarding({ onComplete }) {
             age: parseInt(formData.age),
             daysPerWeek: parseInt(formData.daysPerWeek),
             goalDate: goalDate.toISOString(),
-            onboardingComplete: true
+            onboardingComplete: true,
+            hasLaunched: true  // Perfect Loop flag
         }
 
         setUserProfile(profile)
@@ -101,12 +106,39 @@ function Onboarding({ onComplete }) {
 
     const renderStep = () => {
         switch (STEPS[currentStep]) {
+            // NEW: Name Step
+            case 'name':
+                return (
+                    <div className="onboard-step name-step">
+                        <h1 className="bootcamp-title">CHAVEZ BOOTCAMP</h1>
+                        <div className="name-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" viewBox="0 0 256 256">
+                                <path d="M248,120h-8V88a16,16,0,0,0-16-16H208V64a16,16,0,0,0-16-16H168a16,16,0,0,0-16,16v56H104V64A16,16,0,0,0,88,48H64A16,16,0,0,0,48,64v8H32A16,16,0,0,0,16,88v32H8a8,8,0,0,0,0,16h8v32a16,16,0,0,0,16,16H48v8a16,16,0,0,0,16,16H88a16,16,0,0,0,16-16V136h48v56a16,16,0,0,0,16,16h24a16,16,0,0,0,16-16v-8h16a16,16,0,0,0,16-16V136h8a8,8,0,0,0,0-16ZM32,168V88H48v80Zm56,24H64V64H88V192Zm104,0H168V64h24V175.82c0,.06,0,.12,0,.18s0,.12,0,.18V192Zm32-24H208V88h16Z"></path>
+                            </svg>
+                        </div>
+                        <h2 className="step-title">WHAT SHOULD I CALL YOU, SOLDIER?</h2>
+                        <p className="step-subtitle">This is how I'll address you. Make it count.</p>
+
+                        <div className="form-group name-input-group">
+                            <input
+                                type="text"
+                                className="form-input name-input"
+                                placeholder="Your name or callsign"
+                                value={formData.name}
+                                onChange={e => updateForm('name', e.target.value)}
+                                autoFocus
+                                autoComplete="off"
+                            />
+                        </div>
+                    </div>
+                )
+
             case 'basics':
                 return (
                     <div className="onboard-step">
                         <h1 className="bootcamp-title">CHAVEZ BOOTCAMP</h1>
                         <h2 className="step-title">THE BASICS</h2>
-                        <p className="step-subtitle">Let's get your stats, soldier.</p>
+                        <p className="step-subtitle">Let's get your stats, {formData.name || 'soldier'}.</p>
 
                         <div className="form-group">
                             <label className="form-label">Age</label>
@@ -167,7 +199,7 @@ function Onboarding({ onComplete }) {
                     <div className="onboard-step">
                         <h1 className="bootcamp-title">CHAVEZ BOOTCAMP</h1>
                         <h2 className="step-title">YOUR MISSION</h2>
-                        <p className="step-subtitle">What are we fighting for?</p>
+                        <p className="step-subtitle">What are we fighting for, {formData.name || 'soldier'}?</p>
 
                         <div className="form-group">
                             <label className="form-label">Goal</label>
@@ -252,7 +284,6 @@ function Onboarding({ onComplete }) {
                                                         updateForm('injuries', [...formData.injuries, injury])
                                                     } else {
                                                         updateForm('injuries', formData.injuries.filter(i => i !== injury))
-                                                        // Clear rating when unchecked
                                                         const newRatings = { ...formData.injuryRatings }
                                                         delete newRatings[injury]
                                                         setFormData(prev => ({ ...prev, injuryRatings: newRatings }))
@@ -262,7 +293,6 @@ function Onboarding({ onComplete }) {
                                             <span>{injury.charAt(0).toUpperCase() + injury.slice(1)}</span>
                                         </label>
 
-                                        {/* Pain Rating - show only when injury is selected */}
                                         {formData.injuries.includes(injury) && (
                                             <div className="pain-rating">
                                                 <span className="pain-label">Pain Level:</span>
@@ -292,7 +322,7 @@ function Onboarding({ onComplete }) {
                     <div className="onboard-step">
                         <h1 className="bootcamp-title">CHAVEZ BOOTCAMP</h1>
                         <h2 className="step-title">YOUR BATTLEFIELD</h2>
-                        <p className="step-subtitle">Where will you train?</p>
+                        <p className="step-subtitle">Where will you train, {formData.name || 'soldier'}?</p>
 
                         <div className="form-group">
                             <label className="form-label">Workout Location</label>
@@ -401,7 +431,7 @@ function Onboarding({ onComplete }) {
                     <div className="onboard-step">
                         <h1 className="bootcamp-title">CHAVEZ BOOTCAMP</h1>
                         <h2 className="step-title">YOUR WHY</h2>
-                        <p className="step-subtitle">Why are you doing this? Be honest. This will keep you going when it gets hard.</p>
+                        <p className="step-subtitle">Why are you doing this, {formData.name || 'soldier'}? Be honest.</p>
 
                         <div className="form-group">
                             <textarea
@@ -414,7 +444,7 @@ function Onboarding({ onComplete }) {
                         </div>
 
                         <p className="text-muted text-center">
-                            Write this for yourself. No one else will see it. Be real.
+                            This will keep you going when it gets hard. Be real.
                         </p>
                     </div>
                 )
@@ -426,6 +456,8 @@ function Onboarding({ onComplete }) {
 
     const canProceed = () => {
         switch (STEPS[currentStep]) {
+            case 'name':
+                return formData.name.length >= 2
             case 'basics':
                 return formData.age && formData.heightFeet && formData.currentWeight
             case 'goals':

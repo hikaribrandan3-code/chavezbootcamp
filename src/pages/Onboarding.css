@@ -225,6 +225,45 @@
     gap: var(--space-md);
 }
 
+.onboarding-container {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-lg);
+    padding-top: var(--safe-area-top);
+    padding-bottom: var(--safe-area-bottom);
+    background: var(--color-bg-primary);
+}
+
+/* Name Step Styles */
+.name-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-top: var(--space-xl);
+}
+
+.name-icon {
+    color: var(--color-accent);
+    margin-bottom: var(--space-lg);
+}
+
+.name-input-group {
+    width: 100%;
+    max-width: 320px;
+    margin-top: var(--space-lg);
+}
+
+.name-input {
+    font-size: var(--text-2xl);
+    font-family: var(--font-display);
+    text-align: center;
+    padding: var(--space-lg);
+    letter-spacing: 0.05em;
+}
+
 .option-card {
     flex: 1;
     display: flex;
