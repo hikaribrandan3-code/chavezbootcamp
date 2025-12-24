@@ -317,3 +317,154 @@
     border-color: var(--color-accent);
     color: var(--color-text-primary);
 }
+
+/* ====================================
+   BATTLE RECORD - Consistency Calendar
+   ==================================== */
+.battle-record-card {
+    background: #1A1A1A;
+    border-radius: var(--radius-xl);
+    padding: var(--space-lg);
+    margin-top: var(--space-xl);
+    border: 1px solid #2A2A2A;
+}
+
+.battle-record-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-md);
+}
+
+.battle-record-title {
+    font-family: 'Courier New', monospace;
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: #FFFFFF;
+    letter-spacing: 0.1em;
+    margin: 0;
+}
+
+.battle-record-count {
+    font-family: 'Courier New', monospace;
+    font-size: var(--text-sm);
+    color: #CCFF00;
+    font-weight: 700;
+}
+
+/* Month Navigator */
+.battle-month-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-md);
+}
+
+.month-nav-btn {
+    width: 32px;
+    height: 32px;
+    background: #2A2A2A;
+    border: none;
+    border-radius: var(--radius-md);
+    color: #888;
+    font-size: var(--text-xl);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.month-nav-btn:hover {
+    background: #3A3A3A;
+    color: #FFF;
+}
+
+.month-label {
+    font-family: 'Courier New', monospace;
+    font-size: var(--text-sm);
+    color: #888;
+    letter-spacing: 0.1em;
+}
+
+/* Day Labels */
+.battle-day-labels {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    margin-bottom: var(--space-sm);
+}
+
+.day-label {
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    color: #555;
+    text-align: center;
+}
+
+/* Calendar Grid */
+.battle-calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+.calendar-cell {
+    aspect-ratio: 1;
+    background: #252525;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.calendar-cell.empty {
+    background: transparent;
+}
+
+.calendar-cell.today {
+    border: 1px solid #CCFF00;
+}
+
+.calendar-cell.hit {
+    background: rgba(204, 255, 0, 0.2);
+}
+
+.calendar-cell .hit-dot {
+    width: 8px;
+    height: 8px;
+    background: #CCFF00;
+    border-radius: 50%;
+    box-shadow: 0 0 6px rgba(204, 255, 0, 0.6);
+}
+
+/* Legend */
+.battle-legend {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-lg);
+    margin-top: var(--space-md);
+    padding-top: var(--space-md);
+    border-top: 1px solid #2A2A2A;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    color: #666;
+}
+
+.legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.legend-dot.empty-dot {
+    background: #252525;
+}
+
+.legend-dot.hit-dot {
+    background: #CCFF00;
+}

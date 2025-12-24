@@ -4,9 +4,128 @@
  */
 
 import { useState, useEffect, useRef } from 'react'
-import { getWorkoutPlan, getTodaysWorkout, logCompletedWorkout, getUserProfile } from '../utils/storage.js'
+import { getWorkoutPlan, getTodaysWorkout, logCompletedWorkout, getUserProfile, getWorkoutHistory } from '../utils/storage.js'
 import { formatTime } from '../utils/workoutGenerator.js'
 import './Train.css'
+
+// Battle Record Calendar Component
+function BattleRecordCard() {
+    const [workoutDates, setWorkoutDates] = useState(new Set())
+    const [currentMonth, setCurrentMonth] = useState(new Date())
+
+    useEffect(() => {
+        const history = getWorkoutHistory()
+        const dates = new Set()
+
+        history.forEach(workout => {
+            if (workout.completedAt) {
+                const date = new Date(workout.completedAt)
+                // Store as YYYY-MM-DD for easy comparison
+                dates.add(date.toISOString().split('T')[0])
+            }
+        })
+
+        setWorkoutDates(dates)
+    }, [])
+
+    const getDaysInMonth = (date) => {
+        return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()
+    }
+
+    const getFirstDayOfMonth = (date) => {
+        const first = new Date(date.getFullYear(), date.getMonth(), 1)
+        return first.getDay() === 0 ? 6 : first.getDay() - 1 // Monday = 0
+    }
+
+    const isWorkoutDay = (day) => {
+        const dateStr = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day)
+            .toISOString().split('T')[0]
+        return workoutDates.has(dateStr)
+    }
+
+    const isToday = (day) => {
+        const today = new Date()
+        return day === today.getDate() &&
+            currentMonth.getMonth() === today.getMonth() &&
+            currentMonth.getFullYear() === today.getFullYear()
+    }
+
+    const monthNames = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN',
+        'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
+    const dayNames = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
+
+    const daysInMonth = getDaysInMonth(currentMonth)
+    const firstDay = getFirstDayOfMonth(currentMonth)
+    const totalWorkouts = workoutDates.size
+
+    const prevMonth = () => {
+        setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1))
+    }
+
+    const nextMonth = () => {
+        setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1))
+    }
+
+    return (
+        <div className="battle-record-card">
+            <div className="battle-record-header">
+                <h3 className="battle-record-title">BATTLE RECORD</h3>
+                <span className="battle-record-count">{totalWorkouts} HITS</span>
+            </div>
+
+            {/* Month Navigator */}
+            <div className="battle-month-nav">
+                <button className="month-nav-btn" onClick={prevMonth}>‹</button>
+                <span className="month-label">
+                    {monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}
+                </span>
+                <button className="month-nav-btn" onClick={nextMonth}>›</button>
+            </div>
+
+            {/* Day Labels */}
+            <div className="battle-day-labels">
+                {dayNames.map((day, idx) => (
+                    <span key={idx} className="day-label">{day}</span>
+                ))}
+            </div>
+
+            {/* Calendar Grid */}
+            <div className="battle-calendar-grid">
+                {/* Empty cells for offset */}
+                {Array.from({ length: firstDay }).map((_, idx) => (
+                    <div key={`empty-${idx}`} className="calendar-cell empty" />
+                ))}
+
+                {/* Day cells */}
+                {Array.from({ length: daysInMonth }).map((_, idx) => {
+                    const day = idx + 1
+                    const hasWorkout = isWorkoutDay(day)
+                    const isTodayCell = isToday(day)
+
+                    return (
+                        <div
+                            key={day}
+                            className={`calendar-cell ${hasWorkout ? 'hit' : ''} ${isTodayCell ? 'today' : ''}`}
+                        >
+                            {hasWorkout && <span className="hit-dot" />}
+                        </div>
+                    )
+                })}
+            </div>
+
+            {/* Legend */}
+            <div className="battle-legend">
+                <span className="legend-item">
+                    <span className="legend-dot empty-dot" /> Miss
+                </span>
+                <span className="legend-item">
+                    <span className="legend-dot hit-dot" /> Hit
+                </span>
+            </div>
+        </div>
+    )
+}
+
 
 function Train() {
     const [view, setView] = useState('overview') // overview | session | complete
@@ -180,6 +299,9 @@ function Train() {
                         <p>Recover. Stretch. Stay hydrated. Tomorrow we go again.</p>
                     </div>
                 )}
+
+                {/* BATTLE RECORD - Consistency Calendar */}
+                <BattleRecordCard />
             </div>
         )
     }
