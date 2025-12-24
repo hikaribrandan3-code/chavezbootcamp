@@ -15,11 +15,42 @@
     border: 2px solid #333;
     border-radius: var(--radius-lg);
     padding: var(--space-md) var(--space-lg);
-    margin-bottom: var(--space-lg);
+    margin-bottom: var(--space-md);
     font-family: 'Courier New', 'Consolas', monospace;
     box-shadow:
         inset 0 2px 4px rgba(0, 0, 0, 0.8),
         0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* ====================================
+   MILITARY RANK BADGE
+   ==================================== */
+.rank-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-lg);
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: var(--radius-full);
+    margin-bottom: var(--space-lg);
+}
+
+.rank-label {
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.6);
+    letter-spacing: 0.1em;
+}
+
+.rank-value {
+    font-family: 'Courier New', monospace;
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: #9FE870;
+    letter-spacing: 0.15em;
+    text-shadow: 0 0 8px rgba(159, 232, 112, 0.5);
 }
 
 .casio-hours,

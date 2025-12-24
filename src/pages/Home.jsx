@@ -1,14 +1,24 @@
 /**
  * Chavez Bootcamp - Home Dashboard
- * Final Pre-Ship: Casio-style digital clock
+ * Final Pre-Ship: Casio-style digital clock + Military Rank System
  */
 
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { getUserProfile, getWorkoutPlan, getTodaysWorkout, getCurrentStreak, getLatestWeight, getWeightProgress, getDaysUntilGoal, getWorkoutsCompletedThisWeek, unlockBadge, hasBadge } from '../utils/storage.js'
+import { getUserProfile, getWorkoutPlan, getTodaysWorkout, getCurrentStreak, getLatestWeight, getWeightProgress, getDaysUntilGoal, getWorkoutsCompletedThisWeek, unlockBadge, hasBadge, getTotalWorkoutsCompleted } from '../utils/storage.js'
 import { getDailyQuote } from '../data/quotes.js'
 import { Icons } from '../components/Icons.jsx'
 import './Home.css'
+
+// Military Rank Calculator
+function calculateRank(totalWorkouts) {
+    if (totalWorkouts >= 100) return 'SPARTAN'
+    if (totalWorkouts >= 50) return 'SERGEANT'
+    if (totalWorkouts >= 25) return 'CORPORAL'
+    if (totalWorkouts >= 10) return 'PRIVATE'
+    return 'RECRUIT'
+}
+
 
 function Home() {
     const navigate = useNavigate()
@@ -19,6 +29,7 @@ function Home() {
     const [stats, setStats] = useState({})
     const [overrideRestDay, setOverrideRestDay] = useState(false)
     const [militaryTime, setMilitaryTime] = useState({ hours: '00', minutes: '00', seconds: '00' })
+    const [totalWorkouts, setTotalWorkouts] = useState(0)
 
     useEffect(() => {
         const userProfile = getUserProfile()
@@ -26,6 +37,7 @@ function Home() {
         setTodaysWorkout(getTodaysWorkout())
         setStreak(getCurrentStreak())
         setQuote(getDailyQuote())
+        setTotalWorkouts(getTotalWorkoutsCompleted())
 
         setStats({
             currentWeight: getLatestWeight() || userProfile?.currentWeight,
@@ -89,6 +101,12 @@ function Home() {
                 <span className="casio-minutes">{militaryTime.minutes}</span>
                 <span className="casio-sep casio-sep-sm">:</span>
                 <span className="casio-seconds">{militaryTime.seconds}</span>
+            </div>
+
+            {/* Rank Badge */}
+            <div className="rank-badge">
+                <span className="rank-label">CURRENT RANK:</span>
+                <span className="rank-value">{calculateRank(totalWorkouts)}</span>
             </div>
 
             {/* Header */}
