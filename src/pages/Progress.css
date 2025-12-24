@@ -379,10 +379,13 @@
     display: flex;
     gap: var(--space-sm);
     flex: 1;
+    min-width: 0;
 }
 
 .input-row .height-inputs input {
     flex: 1;
+    min-width: 50px;
+    max-width: 80px;
 }
 
 /* Calculate Button */
