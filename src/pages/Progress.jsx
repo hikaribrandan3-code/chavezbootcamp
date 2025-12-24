@@ -1,11 +1,181 @@
 /**
  * Chavez Bootcamp - Progress Page
- * Analytics dashboard with charts and badges
+ * Analytics dashboard with charts, badges, and Field Analysis calculators
  */
 
 import { useState, useEffect } from 'react'
 import { getUserProfile, getWeightLogs, getWorkoutHistory, getBadges, getAllBadgeDefinitions, getCurrentStreak, getWeightProgress, getTotalWorkoutsCompleted } from '../utils/storage.js'
 import './Progress.css'
+
+// Field Analysis Calculator Component
+function FieldAnalysisCard() {
+    const [mode, setMode] = useState('fuel') // fuel | scan
+    const [result, setResult] = useState(null)
+
+    // FUEL (TDEE) inputs
+    const [age, setAge] = useState('')
+    const [weight, setWeight] = useState('')
+    const [heightFt, setHeightFt] = useState('')
+    const [heightIn, setHeightIn] = useState('')
+    const [gender, setGender] = useState('male')
+    const [activity, setActivity] = useState('1.55')
+
+    // SCAN (Body Fat) inputs
+    const [neck, setNeck] = useState('')
+    const [waist, setWaist] = useState('')
+    const [hip, setHip] = useState('') // For females
+
+    // Calculate TDEE (Mifflin-St Jeor)
+    const calculateTDEE = () => {
+        const heightCm = ((parseInt(heightFt) * 12) + parseInt(heightIn || 0)) * 2.54
+        const weightKg = parseFloat(weight) * 0.453592
+
+        let bmr
+        if (gender === 'male') {
+            bmr = (10 * weightKg) + (6.25 * heightCm) - (5 * parseInt(age)) + 5
+        } else {
+            bmr = (10 * weightKg) + (6.25 * heightCm) - (5 * parseInt(age)) - 161
+        }
+
+        const tdee = Math.round(bmr * parseFloat(activity))
+        setResult(tdee)
+    }
+
+    // Calculate Body Fat (US Navy Method)
+    const calculateBodyFat = () => {
+        const heightInches = (parseInt(heightFt) * 12) + parseInt(heightIn || 0)
+        const neckCm = parseFloat(neck) * 2.54
+        const waistCm = parseFloat(waist) * 2.54
+        const heightCm = heightInches * 2.54
+
+        let bf
+        if (gender === 'male') {
+            bf = 495 / (1.0324 - 0.19077 * Math.log10(waistCm - neckCm) + 0.15456 * Math.log10(heightCm)) - 450
+        } else {
+            const hipCm = parseFloat(hip) * 2.54
+            bf = 495 / (1.29579 - 0.35004 * Math.log10(waistCm + hipCm - neckCm) + 0.22100 * Math.log10(heightCm)) - 450
+        }
+
+        setResult(Math.max(0, Math.min(50, bf.toFixed(1))))
+    }
+
+    const handleCalculate = () => {
+        if (mode === 'fuel') {
+            calculateTDEE()
+        } else {
+            calculateBodyFat()
+        }
+    }
+
+    const isValid = () => {
+        if (mode === 'fuel') {
+            return age && weight && heightFt && gender && activity
+        } else {
+            return neck && waist && heightFt && (gender === 'male' || hip)
+        }
+    }
+
+    return (
+        <div className="field-analysis-card">
+            <h3 className="field-analysis-title">FIELD ANALYSIS</h3>
+
+            {/* Mode Toggle */}
+            <div className="analysis-toggle">
+                <button
+                    className={`toggle-btn ${mode === 'fuel' ? 'active' : ''}`}
+                    onClick={() => { setMode('fuel'); setResult(null) }}
+                >
+                    FUEL
+                </button>
+                <button
+                    className={`toggle-btn ${mode === 'scan' ? 'active' : ''}`}
+                    onClick={() => { setMode('scan'); setResult(null) }}
+                >
+                    SCAN
+                </button>
+            </div>
+
+            <p className="analysis-desc">
+                {mode === 'fuel' ? 'Calculate daily calorie needs (TDEE)' : 'Estimate body fat % (US Navy Method)'}
+            </p>
+
+            {/* Shared Inputs */}
+            <div className="analysis-inputs">
+                <div className="input-row">
+                    <label>Gender</label>
+                    <select value={gender} onChange={e => setGender(e.target.value)}>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+
+                <div className="input-row">
+                    <label>Height</label>
+                    <div className="height-inputs">
+                        <input type="number" placeholder="ft" value={heightFt} onChange={e => setHeightFt(e.target.value)} />
+                        <input type="number" placeholder="in" value={heightIn} onChange={e => setHeightIn(e.target.value)} />
+                    </div>
+                </div>
+
+                {mode === 'fuel' ? (
+                    <>
+                        <div className="input-row">
+                            <label>Age</label>
+                            <input type="number" placeholder="years" value={age} onChange={e => setAge(e.target.value)} />
+                        </div>
+                        <div className="input-row">
+                            <label>Weight</label>
+                            <input type="number" placeholder="lbs" value={weight} onChange={e => setWeight(e.target.value)} />
+                        </div>
+                        <div className="input-row">
+                            <label>Activity</label>
+                            <select value={activity} onChange={e => setActivity(e.target.value)}>
+                                <option value="1.2">Sedentary</option>
+                                <option value="1.375">Light (1-3x/wk)</option>
+                                <option value="1.55">Moderate (3-5x/wk)</option>
+                                <option value="1.725">Active (6-7x/wk)</option>
+                                <option value="1.9">Very Active</option>
+                            </select>
+                        </div>
+                    </>
+                ) : (
+                    <>
+                        <div className="input-row">
+                            <label>Neck</label>
+                            <input type="number" placeholder="inches" value={neck} onChange={e => setNeck(e.target.value)} />
+                        </div>
+                        <div className="input-row">
+                            <label>Waist</label>
+                            <input type="number" placeholder="inches" value={waist} onChange={e => setWaist(e.target.value)} />
+                        </div>
+                        {gender === 'female' && (
+                            <div className="input-row">
+                                <label>Hip</label>
+                                <input type="number" placeholder="inches" value={hip} onChange={e => setHip(e.target.value)} />
+                            </div>
+                        )}
+                    </>
+                )}
+            </div>
+
+            <button
+                className="calculate-btn"
+                onClick={handleCalculate}
+                disabled={!isValid()}
+            >
+                CALCULATE
+            </button>
+
+            {/* Digital Result Display */}
+            {result !== null && (
+                <div className="analysis-result">
+                    <span className="result-value">{result}</span>
+                    <span className="result-unit">{mode === 'fuel' ? 'KCAL/DAY' : '% BODY FAT'}</span>
+                </div>
+            )}
+        </div>
+    )
+}
 
 function Progress() {
     const [profile, setProfile] = useState(null)
@@ -154,6 +324,9 @@ function Progress() {
                     <span className="summary-label">TO GOAL</span>
                 </div>
             </div>
+
+            {/* Field Analysis Calculators */}
+            <FieldAnalysisCard />
 
             {/* Weight Trend */}
             <div className="chart-section">

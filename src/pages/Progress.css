@@ -278,3 +278,167 @@
     color: var(--color-accent);
     font-weight: 600;
 }
+
+/* ====================================
+   FIELD ANALYSIS CALCULATORS
+   ==================================== */
+.field-analysis-card {
+    background: #0D0D0D;
+    border-radius: var(--radius-xl);
+    padding: var(--space-lg);
+    margin-bottom: var(--space-xl);
+    border: 1px solid #2A2A2A;
+}
+
+.field-analysis-title {
+    font-family: 'Courier New', monospace;
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: #FFFFFF;
+    letter-spacing: 0.15em;
+    margin: 0 0 var(--space-md) 0;
+    text-align: center;
+}
+
+/* Toggle Buttons */
+.analysis-toggle {
+    display: flex;
+    gap: 2px;
+    background: #1A1A1A;
+    border-radius: var(--radius-md);
+    padding: 2px;
+    margin-bottom: var(--space-md);
+}
+
+.toggle-btn {
+    flex: 1;
+    padding: var(--space-sm) var(--space-md);
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: 'Courier New', monospace;
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: #666;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    letter-spacing: 0.1em;
+}
+
+.toggle-btn.active {
+    background: #9FE870;
+    color: #000;
+}
+
+.analysis-desc {
+    text-align: center;
+    font-size: var(--text-sm);
+    color: #666;
+    margin-bottom: var(--space-lg);
+}
+
+/* Input Rows */
+.analysis-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+}
+
+.input-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.input-row label {
+    width: 70px;
+    font-family: 'Courier New', monospace;
+    font-size: var(--text-sm);
+    color: #888;
+    flex-shrink: 0;
+}
+
+.input-row input,
+.input-row select {
+    flex: 1;
+    padding: var(--space-sm) var(--space-md);
+    background: #1A1A1A;
+    border: 1px solid #333;
+    border-radius: var(--radius-md);
+    color: #FFFFFF;
+    font-family: 'Courier New', monospace;
+    font-size: var(--text-sm);
+}
+
+.input-row input::placeholder {
+    color: #444;
+}
+
+.input-row .height-inputs {
+    display: flex;
+    gap: var(--space-sm);
+    flex: 1;
+}
+
+.input-row .height-inputs input {
+    flex: 1;
+}
+
+/* Calculate Button */
+.calculate-btn {
+    width: 100%;
+    padding: var(--space-md);
+    background: #9FE870;
+    border: none;
+    border-radius: var(--radius-md);
+    font-family: 'Courier New', monospace;
+    font-size: var(--text-md);
+    font-weight: 700;
+    color: #000;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.calculate-btn:disabled {
+    background: #333;
+    color: #666;
+    cursor: not-allowed;
+}
+
+.calculate-btn:not(:disabled):hover {
+    background: #b4ff8a;
+}
+
+/* Digital Result Display */
+.analysis-result {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: var(--space-lg);
+    padding: var(--space-lg);
+    background: #0a0a0a;
+    border: 2px solid #333;
+    border-radius: var(--radius-lg);
+}
+
+.result-value {
+    font-family: 'Courier New', monospace;
+    font-size: 3rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    text-shadow:
+        0 0 10px rgba(255, 255, 255, 0.8),
+        0 0 20px rgba(255, 255, 255, 0.5),
+        0 0 30px rgba(255, 255, 255, 0.3);
+    letter-spacing: 0.05em;
+}
+
+.result-unit {
+    font-family: 'Courier New', monospace;
+    font-size: var(--text-sm);
+    color: #9FE870;
+    letter-spacing: 0.2em;
+    margin-top: var(--space-xs);
+}
