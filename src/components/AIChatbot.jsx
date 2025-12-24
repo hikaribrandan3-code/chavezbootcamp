@@ -82,21 +82,35 @@ function AIChatbot({ onClose }) {
         if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
             recognitionRef.current = new SpeechRecognition()
-            recognitionRef.current.continuous = false
-            recognitionRef.current.interimResults = false
+            recognitionRef.current.continuous = true  // Keep listening for more
+            recognitionRef.current.interimResults = true  // Show interim results
             recognitionRef.current.lang = 'en-US'
 
+            let finalTranscript = ''
+
             recognitionRef.current.onresult = (event) => {
-                const transcript = event.results[0][0].transcript
-                setInput(transcript)
-                setIsListening(false)
+                let interimTranscript = ''
+
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    const transcript = event.results[i][0].transcript
+                    if (event.results[i].isFinal) {
+                        finalTranscript += transcript + ' '
+                    } else {
+                        interimTranscript += transcript
+                    }
+                }
+
+                // Update input with final + interim transcripts
+                setInput(finalTranscript + interimTranscript)
             }
 
-            recognitionRef.current.onerror = () => {
+            recognitionRef.current.onerror = (event) => {
+                console.error('Speech error:', event.error)
                 setIsListening(false)
             }
 
             recognitionRef.current.onend = () => {
+                // Only set listening to false, don't clear transcript
                 setIsListening(false)
             }
         }
