@@ -421,11 +421,24 @@
 }
 
 .calendar-cell.today {
-    border: 1px solid #CCFF00;
+    border: 2px solid #CCFF00;
 }
 
+/* Day number inside cell */
+.cell-day {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: #555;
+}
+
+/* Hit day - green background with black text */
 .calendar-cell.hit {
-    background: rgba(204, 255, 0, 0.2);
+    background: #CCFF00;
+}
+
+.calendar-cell.hit .cell-day {
+    color: #000;
 }
 
 .calendar-cell .hit-dot {

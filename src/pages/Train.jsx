@@ -107,7 +107,7 @@ function BattleRecordCard() {
                             key={day}
                             className={`calendar-cell ${hasWorkout ? 'hit' : ''} ${isTodayCell ? 'today' : ''}`}
                         >
-                            {hasWorkout && <span className="hit-dot" />}
+                            <span className="cell-day">{day}</span>
                         </div>
                     )
                 })}
