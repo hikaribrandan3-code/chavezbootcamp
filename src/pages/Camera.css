@@ -1,4 +1,4 @@
-/* Camera Page Styles - Rev 3 */
+/* Camera Page Styles - Final Pre-Ship iOS Fix */
 
 .camera-page {
     padding-bottom: calc(var(--nav-height) + var(--space-xl) + var(--safe-area-bottom));
@@ -149,54 +149,71 @@
 }
 
 /* ====================================
-   CAPTURE VIEW - IN-APP LIVE CAMERA
+   CAPTURE VIEW - iOS FIXED
    ==================================== */
 .camera-capture {
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
     width: 100%;
     height: 100%;
-    min-height: 100vh;
-    min-height: 100dvh;
     background: #000;
     z-index: 9999;
-    display: flex;
-    flex-direction: column;
     overflow: hidden;
 }
 
+/* Video MUST be absolute positioned to fill container */
 .camera-preview {
-    flex: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    min-height: 100vh;
-    min-height: 100dvh;
     object-fit: cover;
     background: #000;
+    z-index: 1;
 }
 
 .captured-preview {
-    flex: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    min-height: 100vh;
-    min-height: 100dvh;
     object-fit: cover;
     background: #000;
+    z-index: 1;
 }
 
-/* Guide Overlay */
+/* Camera Loading */
+.camera-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+    color: white;
+    text-align: center;
+}
+
+.camera-loading p {
+    font-size: var(--text-sm);
+    opacity: 0.7;
+}
+
+/* Guide Overlay - ABOVE video */
 .camera-guide {
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     pointer-events: none;
+    z-index: 10;
 }
 
 .guide-silhouette {
@@ -208,13 +225,13 @@
 
 .guide-text {
     position: absolute;
-    bottom: 120px;
+    bottom: 140px;
     color: rgba(255, 255, 255, 0.7);
     font-size: var(--text-sm);
     text-align: center;
 }
 
-/* Camera Controls */
+/* Camera Controls - ABOVE everything */
 .camera-controls {
     position: absolute;
     bottom: 0;
@@ -226,6 +243,7 @@
     padding: var(--space-xl);
     padding-bottom: calc(var(--space-xl) + var(--safe-area-bottom));
     background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    z-index: 20;
 }
 
 .control-btn {
@@ -261,7 +279,12 @@
     transition: all var(--transition-fast);
 }
 
-.capture-btn:active {
+.capture-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.capture-btn:active:not(:disabled) {
     transform: scale(0.95);
 }
 
@@ -290,6 +313,7 @@
     padding: var(--space-xl);
     padding-bottom: calc(var(--space-xl) + var(--safe-area-bottom));
     background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+    z-index: 20;
 }
 
 .capture-actions .btn {

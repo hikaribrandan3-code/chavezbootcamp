@@ -1,6 +1,6 @@
 /**
  * Chavez Bootcamp - Camera Page
- * Rev 3: In-app live camera preview with upgraded UI
+ * Final Pre-Ship: Fixed iOS black screen with absolute positioning
  */
 
 import { useState, useRef, useEffect } from 'react'
@@ -16,6 +16,7 @@ function Camera() {
     const [weightInput, setWeightInput] = useState('')
     const [facingMode, setFacingMode] = useState('user')
     const [cameraError, setCameraError] = useState(null)
+    const [cameraReady, setCameraReady] = useState(false)
 
     const videoRef = useRef(null)
     const canvasRef = useRef(null)
@@ -34,24 +35,36 @@ function Camera() {
 
     const startCamera = async () => {
         setCameraError(null)
+        setCameraReady(false)
+
         try {
+            // Request camera permission explicitly
             const mediaStream = await navigator.mediaDevices.getUserMedia({
                 video: {
                     facingMode,
-                    width: { ideal: 1080 },
-                    height: { ideal: 1920 }
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
                 },
                 audio: false
             })
 
             setStream(mediaStream)
-            if (videoRef.current) {
-                videoRef.current.srcObject = mediaStream
-            }
             setView('capture')
+
+            // Wait for next tick to ensure video element is mounted
+            setTimeout(() => {
+                if (videoRef.current) {
+                    videoRef.current.srcObject = mediaStream
+                    videoRef.current.onloadedmetadata = () => {
+                        videoRef.current.play()
+                        setCameraReady(true)
+                    }
+                }
+            }, 100)
+
         } catch (err) {
             console.error('Camera error:', err)
-            setCameraError('Unable to access camera. Please check permissions.')
+            setCameraError('Camera access denied. Please enable camera permissions in your browser settings.')
         }
     }
 
@@ -63,11 +76,13 @@ function Camera() {
         setView('main')
         setCapturedPhoto(null)
         setCameraError(null)
+        setCameraReady(false)
     }
 
     const flipCamera = async () => {
         const newMode = facingMode === 'user' ? 'environment' : 'user'
         setFacingMode(newMode)
+        setCameraReady(false)
 
         if (stream) {
             stream.getTracks().forEach(track => track.stop())
@@ -76,8 +91,8 @@ function Camera() {
                 const mediaStream = await navigator.mediaDevices.getUserMedia({
                     video: {
                         facingMode: newMode,
-                        width: { ideal: 1080 },
-                        height: { ideal: 1920 }
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 }
                     },
                     audio: false
                 })
@@ -85,6 +100,10 @@ function Camera() {
                 setStream(mediaStream)
                 if (videoRef.current) {
                     videoRef.current.srcObject = mediaStream
+                    videoRef.current.onloadedmetadata = () => {
+                        videoRef.current.play()
+                        setCameraReady(true)
+                    }
                 }
             } catch (err) {
                 console.error('Flip camera error:', err)
@@ -213,22 +232,34 @@ function Camera() {
         )
     }
 
-    // Capture View - In-App Live Camera
+    // Capture View - In-App Live Camera (iOS Fixed)
     if (view === 'capture') {
         return (
             <div className="camera-capture">
+                {/* Hidden canvas for capture */}
                 <canvas ref={canvasRef} style={{ display: 'none' }} />
 
                 {!capturedPhoto ? (
                     <>
+                        {/* Video element - MUST be at bottom layer */}
                         <video
                             ref={videoRef}
                             autoPlay
                             playsInline
                             muted
                             className="camera-preview"
-                            style={{ transform: facingMode === 'user' ? 'scaleX(-1)' : 'none' }}
+                            style={{
+                                transform: facingMode === 'user' ? 'scaleX(-1)' : 'none',
+                                opacity: cameraReady ? 1 : 0
+                            }}
                         />
+
+                        {/* Loading indicator while camera initializes */}
+                        {!cameraReady && (
+                            <div className="camera-loading">
+                                <p>Initializing camera...</p>
+                            </div>
+                        )}
 
                         {/* Guide Overlay */}
                         <div className="camera-guide">
@@ -244,7 +275,7 @@ function Camera() {
                                 </svg>
                             </button>
 
-                            <button className="capture-btn" onClick={capturePhoto}>
+                            <button className="capture-btn" onClick={capturePhoto} disabled={!cameraReady}>
                                 <span className="capture-ring" />
                                 <span className="capture-inner" />
                             </button>

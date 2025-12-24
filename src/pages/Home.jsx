@@ -1,6 +1,6 @@
 /**
  * Chavez Bootcamp - Home Dashboard
- * Final MVP: Large Military HUD Clock, improved layout
+ * Final Pre-Ship: Casio-style digital clock
  */
 
 import { useState, useEffect } from 'react'
@@ -82,15 +82,13 @@ function Home() {
 
     return (
         <div className="page home-page">
-            {/* Military HUD Clock */}
-            <div className="military-clock-hud">
-                <div className="clock-display">
-                    <span className="clock-hours">{militaryTime.hours}</span>
-                    <span className="clock-separator">:</span>
-                    <span className="clock-minutes">{militaryTime.minutes}</span>
-                    <span className="clock-seconds">{militaryTime.seconds}</span>
-                </div>
-                <div className="clock-label">MILITARY TIME</div>
+            {/* Casio-Style Digital Clock - No Label */}
+            <div className="casio-clock">
+                <span className="casio-hours">{militaryTime.hours}</span>
+                <span className="casio-sep">:</span>
+                <span className="casio-minutes">{militaryTime.minutes}</span>
+                <span className="casio-sep casio-sep-sm">:</span>
+                <span className="casio-seconds">{militaryTime.seconds}</span>
             </div>
 
             {/* Header */}
