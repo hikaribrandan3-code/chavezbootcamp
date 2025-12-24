@@ -11,7 +11,6 @@ import { Icons } from '../components/Icons.jsx'
 import './Onboarding.css'
 
 const STEPS = [
-    'welcome',
     'basics',
     'goals',
     'health',
