@@ -59,16 +59,27 @@
     border-radius: var(--radius-full);
     box-shadow: 0 4px 20px rgba(159, 232, 112, 0.4);
     flex-direction: row;
+    overflow: visible;
 }
 
+/* FORCE ICON TO TOP LAYER */
 .nav-item-camera .nav-icon {
-    color: #ffffff;
+    position: relative;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .nav-item-camera .nav-icon svg {
     width: 28px;
     height: 28px;
-    fill: #ffffff;
+    fill: #FFFFFF !important;
+    color: #FFFFFF !important;
+}
+
+.nav-item-camera .nav-icon svg path {
+    fill: #FFFFFF !important;
 }
 
 .nav-item-camera .nav-label {
