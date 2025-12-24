@@ -87,7 +87,9 @@ function AppContent() {
                 {/* Onboarding - accessible anytime */}
                 <Route path="/onboarding" element={<Onboarding onComplete={() => {
                     setIsOnboarded(true)
-                    navigate('/home')
+                    // Reset navigation stack - prevent back button
+                    window.history.replaceState(null, '', '/home')
+                    navigate('/home', { replace: true })
                 }} />} />
 
                 {/* Protected routes - require onboarding */}

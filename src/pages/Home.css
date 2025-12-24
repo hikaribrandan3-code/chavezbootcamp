@@ -208,6 +208,7 @@
     display: inline-flex;
     align-items: baseline;
     gap: 4px;
+    margin-top: 8px;
 }
 
 .stat-unit {
