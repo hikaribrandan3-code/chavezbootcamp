@@ -357,6 +357,22 @@ export function updateSettings(updates) {
 }
 
 // ========================================
+// REST DAY OVERRIDE (Ephemeral Flag)
+// ========================================
+
+export function getRestDayOverride() {
+  return localStorage.getItem('chavez_rest_override') === 'true';
+}
+
+export function setRestDayOverride(value) {
+  if (value) {
+    localStorage.setItem('chavez_rest_override', 'true');
+  } else {
+    localStorage.removeItem('chavez_rest_override');
+  }
+}
+
+// ========================================
 // CHAT HISTORY
 // ========================================
 

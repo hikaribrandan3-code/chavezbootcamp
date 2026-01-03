@@ -5,7 +5,7 @@
 
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { getUserProfile, getWorkoutPlan, getTodaysWorkout, getCurrentStreak, getLatestWeight, getWeightProgress, getDaysUntilGoal, getWorkoutsCompletedThisWeek, unlockBadge, hasBadge, getTotalWorkoutsCompleted } from '../utils/storage.js'
+import { getUserProfile, getWorkoutPlan, getTodaysWorkout, getCurrentStreak, getLatestWeight, getWeightProgress, getDaysUntilGoal, getWorkoutsCompletedThisWeek, unlockBadge, hasBadge, getTotalWorkoutsCompleted, setRestDayOverride } from '../utils/storage.js'
 import { getDailyQuote } from '../data/quotes.js'
 import { Icons } from '../components/Icons.jsx'
 import './Home.css'
@@ -90,6 +90,7 @@ function Home() {
 
     const handleRestDayOverride = () => {
         setOverrideRestDay(true)
+        setRestDayOverride(true) // Persist for Train.jsx navigation
         // Award No Excuses badge
         if (!hasBadge('no_excuses')) {
             unlockBadge('no_excuses')

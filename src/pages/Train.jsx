@@ -4,7 +4,7 @@
  */
 
 import { useState, useEffect, useRef } from 'react'
-import { getWorkoutPlan, getTodaysWorkout, logCompletedWorkout, getUserProfile, getWorkoutHistory } from '../utils/storage.js'
+import { getWorkoutPlan, getTodaysWorkout, logCompletedWorkout, getUserProfile, getWorkoutHistory, getRestDayOverride, setRestDayOverride } from '../utils/storage.js'
 import { formatTime } from '../utils/workoutGenerator.js'
 import './Train.css'
 
@@ -138,13 +138,42 @@ function Train() {
     const [restTime, setRestTime] = useState(60)
     const [sessionTime, setSessionTime] = useState(0)
     const [feedback, setFeedback] = useState('')
+    const [isOverrideSession, setIsOverrideSession] = useState(false)
+
+    // Generate a fallback Full Body workout for Rest Day Override
+    const generateOverrideWorkout = () => ({
+        day: new Date().toLocaleDateString('en-US', { weekday: 'long' }),
+        type: 'fullBody',
+        isOverride: true,
+        estimatedMinutes: 25,
+        exercises: [
+            { name: 'Squats', sets: 3, reps: 12, restSeconds: 60, formCues: ['Knees over toes', 'Hip crease below knee', 'Chest up'] },
+            { name: 'Push-ups', sets: 3, reps: 10, restSeconds: 60, formCues: ['Keep back straight', 'Elbows at 45°', 'Full range of motion'] },
+            { name: 'Lunges', sets: 3, reps: 10, restSeconds: 60, formCues: ['90° angles', 'Upright torso', 'Back knee near ground'] },
+            { name: 'Plank', sets: 3, reps: 30, isTime: true, restSeconds: 45, formCues: ['Straight line head to heels', 'Core tight', "Don't sag hips"] },
+        ]
+    })
 
     const sessionTimerRef = useRef(null)
     const restTimerRef = useRef(null)
 
     useEffect(() => {
         setWorkoutPlan(getWorkoutPlan())
-        setTodaysWorkout(getTodaysWorkout())
+
+        // Check for Rest Day Override flag
+        const overrideRequested = getRestDayOverride()
+        const workout = getTodaysWorkout()
+
+        if (overrideRequested && (!workout || workout.type === 'rest')) {
+            // Force session initialization with fallback workout
+            const overrideWorkout = generateOverrideWorkout()
+            setTodaysWorkout(overrideWorkout)
+            setIsOverrideSession(true)
+            setRestDayOverride(false) // Clear flag immediately - prevents ghost sessions
+        } else {
+            setTodaysWorkout(workout)
+            setRestDayOverride(false) // Always clear on mount
+        }
     }, [])
 
     // Session timer
