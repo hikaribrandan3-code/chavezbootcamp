@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getUserProfile, setUserProfile, getSettings, updateSettings, deleteAllData, getWorkoutPlan, setWorkoutPlan } from '../utils/storage.js'
 import { generateWorkoutPlan } from '../utils/workoutGenerator.js'
+import DaySelector from '../components/DaySelector.jsx'
 import './Settings.css'
 
 function Settings() {
@@ -27,6 +28,7 @@ function Settings() {
             setProfileForm({
                 currentWeight: profile.currentWeight || '',
                 goalWeight: profile.goalWeight || '',
+                selectedDays: profile.selectedDays || ['Mon', 'Wed', 'Fri'],
                 daysPerWeek: profile.daysPerWeek || 3,
                 workoutLocation: profile.workoutLocation || 'home'
             })
@@ -44,15 +46,16 @@ function Settings() {
             ...profileForm,
             currentWeight: parseFloat(profileForm.currentWeight),
             goalWeight: parseFloat(profileForm.goalWeight),
-            daysPerWeek: parseInt(profileForm.daysPerWeek)
+            selectedDays: profileForm.selectedDays,
+            daysPerWeek: profileForm.selectedDays?.length || parseInt(profileForm.daysPerWeek)
         }
 
         setUserProfile(updatedProfile)
         setProfile(updatedProfile)
 
         // Regenerate workout plan if relevant fields changed
-        if (profile.daysPerWeek !== profileForm.daysPerWeek ||
-            profile.workoutLocation !== profileForm.workoutLocation) {
+        const daysChanged = JSON.stringify(profile.selectedDays) !== JSON.stringify(profileForm.selectedDays)
+        if (daysChanged || profile.workoutLocation !== profileForm.workoutLocation) {
             const newPlan = generateWorkoutPlan()
             if (newPlan) setWorkoutPlan(newPlan)
         }
@@ -88,8 +91,10 @@ function Settings() {
                             <span className="profile-value">{profile.goalWeight} lbs</span>
                         </div>
                         <div className="profile-row">
-                            <span className="profile-label">Days/Week</span>
-                            <span className="profile-value">{profile.daysPerWeek}</span>
+                            <span className="profile-label">Training Days</span>
+                            <span className="profile-value">
+                                {profile.selectedDays?.join(', ') || `${profile.daysPerWeek} days`}
+                            </span>
                         </div>
                         <div className="profile-row">
                             <span className="profile-label">Location</span>
@@ -126,17 +131,18 @@ function Settings() {
                         </div>
 
                         <div className="form-group">
-                            <label className="form-label">Days Per Week</label>
-                            <select
-                                className="form-input form-select"
-                                value={profileForm.daysPerWeek}
-                                onChange={e => setProfileForm(p => ({ ...p, daysPerWeek: e.target.value }))}
-                            >
-                                <option value={3}>3 days</option>
-                                <option value={4}>4 days</option>
-                                <option value={5}>5 days</option>
-                                <option value={6}>6 days</option>
-                            </select>
+                            <label className="form-label">Training Days</label>
+                            <DaySelector
+                                selectedDays={profileForm.selectedDays || []}
+                                onChange={(newDays) => {
+                                    setProfileForm(p => ({
+                                        ...p,
+                                        selectedDays: newDays,
+                                        daysPerWeek: newDays.length
+                                    }))
+                                }}
+                                minDays={1}
+                            />
                         </div>
 
                         <div className="form-group">

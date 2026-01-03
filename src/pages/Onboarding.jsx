@@ -7,6 +7,7 @@ import { useState } from 'react'
 import { setUserProfile, setWorkoutPlan } from '../utils/storage.js'
 import { generateWorkoutPlan } from '../utils/workoutGenerator.js'
 import { Icons } from '../components/Icons.jsx'
+import DaySelector from '../components/DaySelector.jsx'
 import './Onboarding.css'
 
 const STEPS = [
@@ -48,7 +49,8 @@ function Onboarding({ onComplete }) {
         budget: 'medium',
 
         // Schedule
-        daysPerWeek: 3,
+        selectedDays: ['Mon', 'Wed', 'Fri'],  // Default: 3 days
+        daysPerWeek: 3,  // Auto-calculated from selectedDays.length
         preferredTime: 'morning',
 
         // Why
@@ -389,24 +391,20 @@ function Onboarding({ onComplete }) {
                     <div className="onboard-step">
                         <h1 className="bootcamp-title">CHAVEZ BOOTCAMP</h1>
                         <h2 className="step-title">COMMIT TO THE MISSION</h2>
-                        <p className="step-subtitle">How many days can you show up?</p>
+                        <p className="step-subtitle">Which days will you show up, {formData.name || 'soldier'}?</p>
 
                         <div className="form-group">
-                            <label className="form-label">Days Per Week</label>
-                            <div className="days-selector">
-                                {[3, 4, 5, 6].map(num => (
-                                    <button
-                                        key={num}
-                                        type="button"
-                                        className={`day-btn ${formData.daysPerWeek === num ? 'selected' : ''}`}
-                                        onClick={() => updateForm('daysPerWeek', num)}
-                                    >
-                                        {num}
-                                    </button>
-                                ))}
-                            </div>
+                            <label className="form-label">Select Your Training Days</label>
+                            <DaySelector
+                                selectedDays={formData.selectedDays}
+                                onChange={(newDays) => {
+                                    updateForm('selectedDays', newDays)
+                                    updateForm('daysPerWeek', newDays.length)
+                                }}
+                                minDays={1}
+                            />
                             <p className="text-muted text-center mt-sm">
-                                {formData.daysPerWeek} days per week is solid. Consistency beats intensity.
+                                Consistency beats intensity. Pick the days you can actually commit to.
                             </p>
                         </div>
 
@@ -467,7 +465,7 @@ function Onboarding({ onComplete }) {
             case 'location':
                 return formData.workoutLocation && formData.budget
             case 'schedule':
-                return formData.daysPerWeek
+                return formData.selectedDays && formData.selectedDays.length >= 1
             case 'why':
                 return formData.whyStatement.length >= 3
             default:

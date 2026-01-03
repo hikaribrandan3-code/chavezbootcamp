@@ -1,0 +1,59 @@
+/**
+ * Day Selector Component Styles
+ * Bootcamp-themed 7-day toggle
+ */
+
+.day-selector {
+    width: 100%;
+    margin: var(--space-md) 0;
+}
+
+.day-selector-grid {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-sm);
+}
+
+.day-btn {
+    flex: 1;
+    aspect-ratio: 1;
+    max-width: 48px;
+    border-radius: 50%;
+    border: 2px solid var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-muted);
+    font-weight: 700;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.day-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: scale(1.05);
+}
+
+.day-btn.selected {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--bg-primary);
+    box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.4);
+    transform: scale(1.08);
+}
+
+.day-btn.selected:hover {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+}
+
+.day-selector-count {
+    text-align: center;
+    margin-top: var(--space-md);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--accent);
+}
